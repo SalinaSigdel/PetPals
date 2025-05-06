@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*" %>
+<%@ page import="utils.DBUtil" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,8 +20,12 @@
         <nav>
             <a href="index.jsp" class="active"><i class="fas fa-home"></i> Home</a>
             <a href="adopt.jsp"><i class="fas fa-heart"></i> Adopt</a>
+            <% if(session.getAttribute("username") == null) { %>
             <a href="login.jsp"><i class="fas fa-user"></i> Login</a>
             <a href="register.jsp"><i class="fas fa-user-plus"></i> Register</a>
+            <% } else { %>
+            <a href="LogoutServlet"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            <% } %>
             <a href="about.jsp"><i class="fas fa-info-circle"></i> About</a>
             <% if(session.getAttribute("username") != null) { %>
             <a href="userprofile.jsp"><i class="fas fa-user-circle"></i> Profile</a>
@@ -51,31 +56,33 @@
                 int shelterCount = 0;
 
                 try {
-                    // Load the JDBC driver
-                    Class.forName("com.mysql.jdbc.Driver");
+                    // Get connection from DBUtil
+                    conn = DBUtil.getConnection();
 
-                    // Establish connection
-                    String url = "jdbc:mysql://localhost:3306/petpals_db";
-                    String username = "root";
-                    String password = "";
-                    conn = DriverManager.getConnection(url, username, password);
-
-                    // Get pets adopted count
-                    pstmt = conn.prepareStatement("SELECT COUNT(*) FROM adoptions WHERE status = 'completed'");
+                    // Get pets adopted count - using Adoption_Applications table
+                    pstmt = conn.prepareStatement("SELECT COUNT(*) FROM Adoption_Applications WHERE status = 'approved'");
                     rs = pstmt.executeQuery();
                     if(rs.next()) {
                         petsAdopted = rs.getInt(1);
                     }
 
+                    // Close resources
+                    rs.close();
+                    pstmt.close();
+
                     // Get success rate
-                    pstmt = conn.prepareStatement("SELECT (COUNT(CASE WHEN status = 'completed' THEN 1 END) * 100.0 / COUNT(*)) FROM adoptions");
+                    pstmt = conn.prepareStatement("SELECT (COUNT(CASE WHEN status = 'approved' THEN 1 END) * 100.0 / COUNT(*)) FROM Adoption_Applications");
                     rs = pstmt.executeQuery();
                     if(rs.next()) {
                         successRate = rs.getDouble(1);
                     }
 
-                    // Get shelter count
-                    pstmt = conn.prepareStatement("SELECT COUNT(*) FROM shelters");
+                    // Close resources
+                    rs.close();
+                    pstmt.close();
+
+                    // There's no shelters table in the schema, so we'll just count adopters instead
+                    pstmt = conn.prepareStatement("SELECT COUNT(*) FROM Users WHERE role = 'adopter'");
                     rs = pstmt.executeQuery();
                     if(rs.next()) {
                         shelterCount = rs.getInt(1);
@@ -87,9 +94,7 @@
                     shelterCount = 50;
                 } finally {
                     // Close resources
-                    try { if(rs != null) rs.close(); } catch(Exception e) { }
-                    try { if(pstmt != null) pstmt.close(); } catch(Exception e) { }
-                    try { if(conn != null) conn.close(); } catch(Exception e) { }
+                    DBUtil.closeResources(conn, pstmt, rs);
                 }
             %>
 
@@ -104,7 +109,7 @@
                 </div>
                 <div class="stat">
                     <span class="number"><%= shelterCount %>+</span>
-                    <span class="label">Shelters</span>
+                    <span class="label">Active Users</span>
                 </div>
             </div>
         </div>

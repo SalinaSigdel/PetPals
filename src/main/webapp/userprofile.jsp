@@ -396,15 +396,17 @@
         <nav>
             <a href="index.jsp"><i class="fas fa-home"></i> Home</a>
             <a href="adopt.jsp"><i class="fas fa-heart"></i> Adopt</a>
-            <% if (!isLoggedIn) { %>
+            <% if(session.getAttribute("username") == null) { %>
             <a href="login.jsp"><i class="fas fa-user"></i> Login</a>
             <a href="register.jsp"><i class="fas fa-user-plus"></i> Register</a>
             <% } else { %>
-            <a href="userprofile.jsp" class="active"><i class="fas fa-user-circle"></i> Profile</a>
             <a href="LogoutServlet"><i class="fas fa-sign-out-alt"></i> Logout</a>
             <% } %>
             <a href="about.jsp"><i class="fas fa-info-circle"></i> About</a>
-            <% if (isLoggedIn && "admin".equals(userRole)) { %>
+            <% if(session.getAttribute("username") != null) { %>
+            <a href="userprofile.jsp" class="active"><i class="fas fa-user-circle"></i> Profile</a>
+            <% } %>
+            <% if(session.getAttribute("userRole") != null && session.getAttribute("userRole").equals("admin")) { %>
             <a href="admindashboard.jsp"><i class="fas fa-tachometer-alt"></i> Admin</a>
             <% } %>
         </nav>

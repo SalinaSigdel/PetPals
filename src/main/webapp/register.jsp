@@ -124,8 +124,12 @@
         <nav>
             <a href="index.jsp"><i class="fas fa-home"></i> Home</a>
             <a href="adopt.jsp"><i class="fas fa-heart"></i> Adopt</a>
+            <% if(session.getAttribute("username") == null) { %>
             <a href="login.jsp"><i class="fas fa-user"></i> Login</a>
             <a href="register.jsp" class="active"><i class="fas fa-user-plus"></i> Register</a>
+            <% } else { %>
+            <a href="LogoutServlet"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            <% } %>
             <a href="about.jsp"><i class="fas fa-info-circle"></i> About</a>
             <% if(session.getAttribute("username") != null) { %>
             <a href="userprofile.jsp"><i class="fas fa-user-circle"></i> Profile</a>
@@ -155,7 +159,7 @@
     <form action="RegisterServlet" method="post">
         <div class="input-group">
             <i class="fas fa-user"></i>
-            <input type="text" name="name" placeholder="Full Name" required>
+            <input type="text" name="fullName" placeholder="Full Name" required>
         </div>
 
         <div class="input-group">
@@ -178,8 +182,15 @@
             <select name="role" required>
                 <option value="" disabled selected>I am a...</option>
                 <option value="adopter">Pet Adopter</option>
-                <option value="shelter">Admin</option>
+                <option value="admin">Admin</option>
             </select>
+        </div>
+
+        <div class="input-group">
+            <label style="display: flex; align-items: center; gap: 0.5rem;">
+                <input type="checkbox" name="emailNotifications" checked>
+                Receive email notifications
+            </label>
         </div>
 
         <div class="terms">
