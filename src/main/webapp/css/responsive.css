@@ -1,0 +1,80 @@
+/* Responsive styles for PetPals */
+
+/* Small devices (phones, 576px and down) */
+@media (max-width: 576px) {
+  header .container {
+    padding: 0.75rem;
+  }
+
+  header h1 {
+    font-size: 1.5rem;
+  }
+
+  nav {
+    gap: 0.75rem;
+  }
+
+  nav a {
+    font-size: 0.9rem;
+    padding: 0.3rem;
+  }
+
+  .login-container {
+    padding: 1rem 0.5rem;
+  }
+
+  .form-container {
+    padding: 1.5rem;
+  }
+
+  .form-options {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .admin-form-container {
+    border-radius: 0;
+  }
+
+  .admin-form-section {
+    padding: 1rem;
+  }
+
+  .admin-btn-container {
+    padding: 1rem;
+  }
+}
+
+/* Medium devices (tablets, 768px and down) */
+@media (max-width: 768px) {
+  .content-wrapper {
+    padding: 1rem 0;
+  }
+
+  .login-container {
+    padding: 1.5rem 1rem;
+  }
+
+  .admin-form-row {
+    flex-direction: column;
+  }
+
+  .admin-form-container {
+    margin: 0 0.5rem 1.5rem;
+  }
+
+  .container {
+    padding: 0 1rem;
+  }
+}
+
+/* Large devices (desktops, 992px and down) */
+@media (max-width: 992px) {
+  /* Add styles for large devices if needed */
+}
+
+/* Extra large devices (large desktops, 1200px and down) */
+@media (max-width: 1200px) {
+  /* Add styles for extra large devices if needed */
+}

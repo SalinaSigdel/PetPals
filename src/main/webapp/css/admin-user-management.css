@@ -1,0 +1,296 @@
+/* User Management Styles */
+
+.user-management-container {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+  margin-bottom: 30px;
+}
+
+.user-management-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+  border-left: 4px solid #4CAF50;
+  padding-left: 16px;
+}
+
+.user-management-header h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.user-management-description {
+  color: #666;
+  margin: 0 0 24px 0;
+  padding-left: 20px;
+}
+
+.user-management-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.filter-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.filter-label {
+  font-weight: 500;
+  color: #555;
+}
+
+.filter-select {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+  min-width: 150px;
+  font-size: 14px;
+}
+
+.search-container {
+  position: relative;
+  flex-grow: 1;
+  max-width: 300px;
+}
+
+.search-container input {
+  width: 100%;
+  padding: 8px 12px 8px 36px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.search-container i {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #999;
+}
+
+.btn-add-user {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.2s;
+}
+
+.btn-add-user:hover {
+  background-color: #43a047;
+}
+
+.btn-add-user i {
+  font-size: 16px;
+}
+
+/* Table Styles */
+.users-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-top: 10px;
+}
+
+.users-table th {
+  background-color: #f5f5f5;
+  color: #555;
+  font-weight: 600;
+  text-align: left;
+  padding: 12px 16px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.users-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #eee;
+  vertical-align: middle;
+}
+
+.users-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.users-table tr:hover {
+  background-color: #f0f7ff;
+}
+
+.users-table .id-column {
+  width: 60px;
+  text-align: center;
+}
+
+.users-table .actions-column {
+  width: 120px;
+  text-align: right;
+}
+
+/* Role Badge Styles */
+.role-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.role-badge.admin {
+  background-color: rgba(76, 175, 80, 0.15);
+  color: #2e7d32;
+}
+
+.role-badge.adopter {
+  background-color: rgba(255, 152, 0, 0.15);
+  color: #ef6c00;
+}
+
+.role-badge.volunteer {
+  background-color: rgba(33, 150, 243, 0.15);
+  color: #1565c0;
+}
+
+/* Action Button Styles */
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.btn-action {
+  border: none;
+  border-radius: 4px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-edit {
+  background-color: #FFC107;
+  color: white;
+}
+
+.btn-edit:hover {
+  background-color: #FFB300;
+}
+
+.btn-delete {
+  background-color: #F44336;
+  color: white;
+}
+
+.btn-delete:hover {
+  background-color: #E53935;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .user-management-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .filter-container {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  
+  .search-container {
+    width: 100%;
+    max-width: none;
+    margin-bottom: 10px;
+  }
+  
+  .users-table {
+    display: block;
+    overflow-x: auto;
+  }
+}
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #666;
+}
+
+.empty-state i {
+  font-size: 48px;
+  color: #ddd;
+  margin-bottom: 16px;
+}
+
+.empty-state p {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+  gap: 5px;
+}
+
+.pagination button {
+  border: 1px solid #ddd;
+  background-color: #fff;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.pagination button.active {
+  background-color: #4CAF50;
+  color: white;
+  border-color: #4CAF50;
+}
+
+.pagination button:hover:not(.active) {
+  background-color: #f5f5f5;
+}
+
+/* Tooltip */
+.tooltip {
+  position: relative;
+}
+
+.tooltip:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 1;
+  margin-bottom: 5px;
+}
