@@ -1,85 +1,127 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Login | PetPals</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>
-<body>
-<header>
-    <div class="container">
-        <h1><i class="fas fa-paw"></i> PetPals</h1>
-        <nav>
-            <a href="index.jsp"><i class="fas fa-home"></i> Home</a>
-            <a href="adopt.jsp"><i class="fas fa-heart"></i> Adopt</a>
-            <% if(session.getAttribute("username") == null) { %>
-            <a href="login.jsp" class="active"><i class="fas fa-user"></i> Login</a>
-            <a href="register.jsp"><i class="fas fa-user-plus"></i> Register</a>
-            <% } else { %>
-            <a href="LogoutServlet"><i class="fas fa-sign-out-alt"></i> Logout</a>
-            <% } %>
-            <a href="about.jsp"><i class="fas fa-info-circle"></i> About</a>
-            <% if(session.getAttribute("username") != null) { %>
-            <a href="userprofile.jsp"><i class="fas fa-user-circle"></i> Profile</a>
-            <% } %>
-            <% if(session.getAttribute("userRole") != null && session.getAttribute("userRole").equals("admin")) { %>
-            <a href="admindashboard.jsp"><i class="fas fa-tachometer-alt"></i> Admin</a>
-            <% } %>
-        </nav>
-    </div>
-</header>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="com.snapgramfx.petpals.util.CookieUtil" %>
 
-<div class="form-container">
-    <h2><i class="fas fa-user-circle"></i> Welcome Back</h2>
+<%
+    // Get redirect URL if any
+    String redirectUrl = request.getParameter("redirect");
 
-    <%
-        // Display error message if login failed
-        String errorMessage = (String) session.getAttribute("loginError");
-        if (errorMessage != null) {
-    %>
-    <div class="error-message">
-        <i class="fas fa-exclamation-circle"></i> <%= errorMessage %>
-    </div>
-    <%
-            // Clear the error message after displaying it
-            session.removeAttribute("loginError");
+// Redirect if already logged in
+    Object userIdObj = session.getAttribute("userId");
+    if (userIdObj != null) {
+        if (redirectUrl != null && !redirectUrl.isEmpty()) {
+            response.sendRedirect(redirectUrl);
+        } else {
+            response.sendRedirect("index.jsp");
         }
-    %>
+        return;
+    }
 
-    <form action="LoginServlet" method="post">
-        <div class="input-group">
-            <i class="fas fa-user"></i>
-            <input type="text" name="username" placeholder="Username" required>
-        </div>
-        <div class="input-group">
-            <i class="fas fa-lock"></i>
-            <input type="password" name="password" placeholder="Password" required>
-        </div>
-        <div class="form-options">
-            <label>
-                <input type="checkbox" name="remember"> Remember me
-            </label>
-            <a href="#" class="forgot-password">Forgot Password?</a>
-        </div>
-        <button type="submit" class="btn-login"><i class="fas fa-sign-in-alt"></i> Login</button>
-    </form>
-    <div class="form-footer">
-        <p>New to PetPals? <a href="register.jsp" class="register-link">Create an account</a></p>
-    </div>
-</div>
+// Get remembered username for form pre-filling
+    String rememberedUsername = CookieUtil.getCookieValue(request, "remember_username");
+%>
 
-<footer>
-    <div class="container">
-        <p>&copy; <%= new java.util.Date().getYear() + 1900 %> PetPals | Built with <i class="fas fa-heart"></i> for pets and people</p>
-        <div class="social-links">
-            <a href="#"><i class="fab fa-facebook"></i></a>
-            <a href="#"><i class="fab fa-twitter"></i></a>
-            <a href="#"><i class="fab fa-instagram"></i></a>
+<jsp:include page="/WEB-INF/includes/header.jsp">
+    <jsp:param name="title" value="Login" />
+    <jsp:param name="activePage" value="login" />
+</jsp:include>
+
+<main class="login-container">
+    <div class="form-container">
+        <h2><i class="fas fa-user-circle"></i> Welcome Back</h2>
+
+        <%
+            // Display error message if login failed
+            String errorMessage = (String) request.getAttribute("errorMessage");
+            if (errorMessage == null) {
+                errorMessage = (String) session.getAttribute("loginError");
+            }
+
+            // Check for specific error types from query parameters
+            String errorType = request.getParameter("error");
+            if (errorType != null) {
+                if (errorType.equals("unauthorized")) {
+                    errorMessage = "You need administrator privileges to access this page";
+                } else if (errorType.equals("login_required")) {
+                    errorMessage = "Please log in to access this page";
+                }
+            }
+
+            if (errorMessage != null) {
+        %>
+        <div class="error-message">
+            <i class="fas fa-exclamation-circle"></i> <%= errorMessage %>
+        </div>
+        <%
+                // Clear the error message after displaying it
+                session.removeAttribute("loginError");
+            }
+
+            // Display success message if registration was successful
+            String successMessage = (String) request.getAttribute("successMessage");
+            if (successMessage != null) {
+        %>
+        <div class="success-message">
+            <i class="fas fa-check-circle"></i> <%= successMessage %>
+        </div>
+        <%
+            }
+        %>
+
+        <form action="login" method="post">
+            <% if (redirectUrl != null && !redirectUrl.isEmpty()) { %>
+            <input type="hidden" name="redirect" value="<%= redirectUrl %>">
+            <% } %>
+            <div class="input-group">
+                <i class="fas fa-user"></i>
+                <input type="text" name="username" placeholder="Username" required>
+            </div>
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" name="password" placeholder="Password" required>
+            </div>
+            <div class="form-options">
+                <label>
+                    <input type="checkbox" name="remember" id="remember">
+                    <span>Remember me</span>
+                </label>
+                <a href="forgot-password" class="forgot-password">Forgot Password?</a>
+            </div>
+
+            <script>
+                // Check if username is remembered
+                const rememberedUsername = '<%= rememberedUsername != null ? rememberedUsername : "" %>';
+                if (rememberedUsername) {
+                    document.querySelector('input[name="username"]').value = rememberedUsername;
+                    document.getElementById('remember').checked = true;
+                }
+
+                // Remove any password strength indicators that might be created
+                document.addEventListener('DOMContentLoaded', function() {
+                    // Function to remove password strength indicators
+                    function removePasswordStrength() {
+                        const strengthIndicators = document.querySelectorAll('.password-strength');
+                        strengthIndicators.forEach(indicator => {
+                            indicator.remove();
+                        });
+                    }
+
+                    // Remove on page load
+                    removePasswordStrength();
+
+                    // Also remove when typing in password fields
+                    const passwordFields = document.querySelectorAll('input[type="password"]');
+                    passwordFields.forEach(field => {
+                        field.addEventListener('input', removePasswordStrength);
+                    });
+                });
+            </script>
+            <button type="submit" class="btn-login"><i class="fas fa-sign-in-alt"></i> Login</button>
+        </form>
+        <div class="form-footer">
+            <p>New to PetPals? <a href="register.jsp" class="register-link">Create an account</a></p>
         </div>
     </div>
-</footer>
-</body>
-</html>
+</main>
+
+<jsp:include page="/WEB-INF/includes/footer.jsp" />

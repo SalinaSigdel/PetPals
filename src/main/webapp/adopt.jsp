@@ -1,37 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*" %>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Adopt a Pet | PetPals</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>
-<body>
-<header>
-    <div class="container">
-        <h1><i class="fas fa-paw"></i> PetPals</h1>
-        <nav>
-            <a href="index.jsp"><i class="fas fa-home"></i> Home</a>
-            <a href="adopt.jsp" class="active"><i class="fas fa-heart"></i> Adopt</a>
-            <% if(session.getAttribute("username") == null) { %>
-            <a href="login.jsp"><i class="fas fa-user"></i> Login</a>
-            <a href="register.jsp"><i class="fas fa-user-plus"></i> Register</a>
-            <% } else { %>
-            <a href="LogoutServlet"><i class="fas fa-sign-out-alt"></i> Logout</a>
-            <% } %>
-            <a href="about.jsp"><i class="fas fa-info-circle"></i> About</a>
-            <% if(session.getAttribute("username") != null) { %>
-            <a href="userprofile.jsp"><i class="fas fa-user-circle"></i> Profile</a>
-            <% } %>
-            <% if(session.getAttribute("userRole") != null && session.getAttribute("userRole").equals("admin")) { %>
-            <a href="admindashboard.jsp"><i class="fas fa-tachometer-alt"></i> Admin</a>
-            <% } %>
-        </nav>
-    </div>
-</header>
+<%@ page import="java.util.List" %>
+<%@ page import="com.snapgramfx.petpals.model.Pet" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<jsp:include page="/WEB-INF/includes/header.jsp">
+    <jsp:param name="title" value="Adopt a Pet" />
+    <jsp:param name="activePage" value="adopt" />
+    <jsp:param name="extraHead" value="/WEB-INF/includes/adopt-styles.jsp" />
+</jsp:include>
 
 <section class="adopt-hero">
     <div class="container">
@@ -43,7 +20,7 @@
 <section class="adopt-pets">
     <div class="container">
         <div class="filter-section">
-            <form action="adopt.jsp" method="get" id="filterForm">
+            <form action="adopt" method="get" id="filterForm">
                 <div class="search-bar">
                     <i class="fas fa-search"></i>
                     <input type="text" name="search" placeholder="Search pets..." value="<%= request.getParameter("search") != null ? request.getParameter("search") : "" %>">
@@ -69,90 +46,15 @@
 
         <div class="pet-grid">
             <%
-                Connection conn = null;
-                PreparedStatement pstmt = null;
-                ResultSet rs = null;
+                // Get pets from request attribute
+                List<Pet> pets = (List<Pet>) request.getAttribute("pets");
+                boolean hasResults = (pets != null && !pets.isEmpty());
 
-                try {
-                    // Load JDBC driver
-                    Class.forName("com.mysql.jdbc.Driver");
-
-                    // Establish connection
-                    String url = "jdbc:mysql://localhost:3306/petpals_db";
-                    String username = "root";
-                    String password = "";
-                    conn = DriverManager.getConnection(url, username, password);
-
-                    // Build the query based on filters
-                    StringBuilder queryBuilder = new StringBuilder();
-                    queryBuilder.append("SELECT * FROM pets WHERE is_available = 1");
-
-                    // Add search condition if provided
-                    if(request.getParameter("search") != null && !request.getParameter("search").trim().isEmpty()) {
-                        queryBuilder.append(" AND (name LIKE ? OR breed LIKE ?)");
-                    }
-
-                    // Add pet type filter if provided
-                    if(request.getParameter("petType") != null && !request.getParameter("petType").trim().isEmpty()) {
-                        queryBuilder.append(" AND pet_type = ?");
-                    }
-
-                    // Add age group filter if provided
-                    if(request.getParameter("ageGroup") != null && !request.getParameter("ageGroup").trim().isEmpty()) {
-                        String ageGroup = request.getParameter("ageGroup");
-                        if(ageGroup.equals("puppy")) {
-                            queryBuilder.append(" AND age < 1");
-                        } else if(ageGroup.equals("young")) {
-                            queryBuilder.append(" AND age >= 1 AND age < 3");
-                        } else if(ageGroup.equals("adult")) {
-                            queryBuilder.append(" AND age >= 3 AND age < 8");
-                        } else if(ageGroup.equals("senior")) {
-                            queryBuilder.append(" AND age >= 8");
-                        }
-                    }
-
-                    // Add pagination limits
-                    queryBuilder.append(" LIMIT 6");
-
-                    // Prepare statement with filters
-                    pstmt = conn.prepareStatement(queryBuilder.toString());
-
-                    int paramIndex = 1;
-
-                    // Set search parameter if provided
-                    if(request.getParameter("search") != null && !request.getParameter("search").trim().isEmpty()) {
-                        String searchTerm = "%" + request.getParameter("search") + "%";
-                        pstmt.setString(paramIndex++, searchTerm);
-                        pstmt.setString(paramIndex++, searchTerm);
-                    }
-
-                    // Set pet type parameter if provided
-                    if(request.getParameter("petType") != null && !request.getParameter("petType").trim().isEmpty()) {
-                        pstmt.setString(paramIndex++, request.getParameter("petType"));
-                    }
-
-                    // Execute query
-                    rs = pstmt.executeQuery();
-
-                    // Check if we have results
-                    boolean hasResults = false;
-
-                    // Display pets from database
-                    while(rs.next()) {
-                        hasResults = true;
-                        int petId = rs.getInt("id");
-                        String name = rs.getString("name");
-                        String breed = rs.getString("breed");
-                        String petType = rs.getString("pet_type");
-                        double age = rs.getDouble("age");
-                        String gender = rs.getString("gender");
-                        double weight = rs.getDouble("weight");
-                        String description = rs.getString("description");
-                        String imageUrl = rs.getString("image_url");
-                        String badge = rs.getString("badge");
-
-                        // If no image URL is provided, use a default based on pet type
-                        if(imageUrl == null || imageUrl.trim().isEmpty()) {
+                if (hasResults) {
+                    for (Pet pet : pets) {
+                        String imageUrl = pet.getImageUrl();
+                        if (imageUrl == null || imageUrl.trim().isEmpty()) {
+                            String petType = pet.getType();
                             if("dog".equalsIgnoreCase(petType)) {
                                 imageUrl = "https://images.unsplash.com/photo-1601979031925-424e53b6caaa?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60";
                             } else if("cat".equalsIgnoreCase(petType)) {
@@ -166,31 +68,32 @@
                             }
                         }
             %>
-            <!-- Pet Card for <%= name %> -->
-            <div class="pet-card" data-pet-id="<%= petId %>">
+            <!-- Pet Card for <%= pet.getName() %> -->
+            <div class="pet-card" data-pet-id="<%= pet.getPetId() %>">
                 <div class="pet-image">
-                    <img src="<%= imageUrl %>" alt="<%= breed %>">
-                    <% if(badge != null && !badge.isEmpty()) { %>
-                    <span class="pet-badge"><%= badge %></span>
+                    <img src="<%= imageUrl %>" alt="<%= pet.getBreed() %>" onerror="this.src='https://images.unsplash.com/photo-1517849845537-4d257902454a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'">
+                    <% if(pet.getBadge() != null && !pet.getBadge().isEmpty()) { %>
+                    <span class="pet-badge"><%= pet.getBadge() %></span>
                     <% } %>
                 </div>
                 <div class="pet-info">
-                    <h3><%= name %></h3>
-                    <p class="pet-breed"><%= breed %></p>
+                    <h3><%= pet.getName() %></h3>
+                    <p class="pet-breed"><%= pet.getBreed() %></p>
                     <div class="pet-details">
-                        <span><i class="fas fa-birthday-cake"></i> <%= age < 1 ? String.format("%.1f", age * 12) + " months" : String.format("%.1f", age) + " years" %></span>
-                        <span><i class="fas fa-venus-mars"></i> <%= gender %></span>
-                        <span><i class="fas fa-weight"></i> <%= weight %> kg</span>
+                        <span><i class="fas fa-birthday-cake"></i> <%= pet.getFormattedAge() %></span>
+                        <span><i class="fas fa-venus-mars"></i> <%= pet.getGender() %></span>
+                        <span><i class="fas fa-weight"></i> <%= pet.getWeight() %> kg</span>
                     </div>
                     <div class="pet-description">
-                        <p><%= description %></p>
+                        <p><%= pet.getDescription() %></p>
                     </div>
                     <div class="pet-actions">
-                        <a href="adoptionfrom.jsp?petId=<%= petId %>" class="btn-adopt">Adopt Me</a>
+                        <a href="adoption-form?petId=<%= pet.getPetId() %>" class="btn-adopt">Adopt Me</a>
                     </div>
                 </div>
             </div>
             <%
+                    }
                 }
 
                 // If no pets were found, display a message
@@ -203,92 +106,93 @@
             </div>
             <%
                 }
-
-            } catch(Exception e) {
-                e.printStackTrace();
-                // If there's an error, display sample pet data
             %>
-            <!-- Dog 1 -->
-            <div class="pet-card">
-                <div class="pet-image">
-                    <img src="https://images.unsplash.com/photo-1601979031925-424e53b6caaa?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Golden Retriever">
-                    <span class="pet-badge">New</span>
-                </div>
-                <div class="pet-info">
-                    <h3>Max</h3>
-                    <p class="pet-breed">Golden Retriever</p>
-                    <div class="pet-details">
-                        <span><i class="fas fa-birthday-cake"></i> 2 years</span>
-                        <span><i class="fas fa-venus-mars"></i> Male</span>
-                        <span><i class="fas fa-weight"></i> 30 kg</span>
-                    </div>
-                    <div class="pet-description">
-                        <p>Max is a friendly and energetic Golden Retriever who loves playing fetch and going for long walks. He's great with kids and other pets.</p>
-                    </div>
-                    <div class="pet-actions">
-                        <a href="adoptionfrom.jsp?petId=1" class="btn-adopt">Adopt Me</a>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Cat 1 -->
-            <div class="pet-card">
-                <div class="pet-image">
-                    <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="British Shorthair">
-                    <span class="pet-badge">Popular</span>
-                </div>
-                <div class="pet-info">
-                    <h3>Luna</h3>
-                    <p class="pet-breed">British Shorthair</p>
-                    <div class="pet-details">
-                        <span><i class="fas fa-birthday-cake"></i> 1 year</span>
-                        <span><i class="fas fa-venus-mars"></i> Female</span>
-                        <span><i class="fas fa-weight"></i> 4 kg</span>
-                    </div>
-                    <div class="pet-description">
-                        <p>Luna is a calm and affectionate British Shorthair who enjoys lounging around and being pampered. She's perfect for a quiet home.</p>
-                    </div>
-                    <div class="pet-actions">
-                        <a href="adoptionfrom.jsp?petId=2" class="btn-adopt">Adopt Me</a>
-                    </div>
-                </div>
-            </div>
-            <%
-                } finally {
-                    // Close resources
-                    try { if(rs != null) rs.close(); } catch(Exception e) { }
-                    try { if(pstmt != null) pstmt.close(); } catch(Exception e) { }
-                    try { if(conn != null) conn.close(); } catch(Exception e) { }
-                }
-            %>
+
         </div>
 
+        <% if (request.getAttribute("totalPages") != null && (int)request.getAttribute("totalPages") > 0) { %>
         <div class="pagination">
-            <button class="page-btn"><i class="fas fa-chevron-left"></i></button>
-            <button class="page-btn active">1</button>
-            <button class="page-btn">2</button>
-            <button class="page-btn">3</button>
-            <button class="page-btn"><i class="fas fa-chevron-right"></i></button>
+            <%
+                int currentPage = (int)request.getAttribute("currentPage");
+                int totalPages = (int)request.getAttribute("totalPages");
+
+                // Previous page button
+                if (currentPage > 1) {
+            %>
+            <a href="adopt?page=<%= currentPage - 1 %><%= request.getParameter("search") != null ? "&search=" + request.getParameter("search") : "" %><%= request.getParameter("petType") != null ? "&petType=" + request.getParameter("petType") : "" %><%= request.getParameter("ageGroup") != null ? "&ageGroup=" + request.getParameter("ageGroup") : "" %>" class="page-btn"><i class="fas fa-chevron-left"></i></a>
+            <% } else { %>
+            <span class="page-btn disabled"><i class="fas fa-chevron-left"></i></span>
+            <% } %>
+
+            <%
+                // Determine range of page numbers to display
+                int startPage = Math.max(1, currentPage - 2);
+                int endPage = Math.min(totalPages, currentPage + 2);
+
+                // Ensure we always show at least 5 page numbers if available
+                if (endPage - startPage + 1 < 5) {
+                    if (startPage == 1) {
+                        endPage = Math.min(5, totalPages);
+                    } else if (endPage == totalPages) {
+                        startPage = Math.max(1, totalPages - 4);
+                    }
+                }
+
+                // First page button if not in range
+                if (startPage > 1) {
+            %>
+            <a href="adopt?page=1<%= request.getParameter("search") != null ? "&search=" + request.getParameter("search") : "" %><%= request.getParameter("petType") != null ? "&petType=" + request.getParameter("petType") : "" %><%= request.getParameter("ageGroup") != null ? "&ageGroup=" + request.getParameter("ageGroup") : "" %>" class="page-btn">1</a>
+            <% if (startPage > 2) { %>
+            <span class="page-ellipsis">...</span>
+            <% } %>
+            <% } %>
+
+            <%
+                // Page number buttons
+                for (int i = startPage; i <= endPage; i++) {
+            %>
+            <a href="adopt?page=<%= i %><%= request.getParameter("search") != null ? "&search=" + request.getParameter("search") : "" %><%= request.getParameter("petType") != null ? "&petType=" + request.getParameter("petType") : "" %><%= request.getParameter("ageGroup") != null ? "&ageGroup=" + request.getParameter("ageGroup") : "" %>" class="page-btn <%= i == currentPage ? "active" : "" %>"><%= i %></a>
+            <% } %>
+
+            <%
+                // Last page button if not in range
+                if (endPage < totalPages) {
+                    if (endPage < totalPages - 1) {
+            %>
+            <span class="page-ellipsis">...</span>
+            <% } %>
+            <a href="adopt?page=<%= totalPages %><%= request.getParameter("search") != null ? "&search=" + request.getParameter("search") : "" %><%= request.getParameter("petType") != null ? "&petType=" + request.getParameter("petType") : "" %><%= request.getParameter("ageGroup") != null ? "&ageGroup=" + request.getParameter("ageGroup") : "" %>" class="page-btn"><%= totalPages %></a>
+            <% } %>
+
+            <%
+                // Next page button
+                if (currentPage < totalPages) {
+            %>
+            <a href="adopt?page=<%= currentPage + 1 %><%= request.getParameter("search") != null ? "&search=" + request.getParameter("search") : "" %><%= request.getParameter("petType") != null ? "&petType=" + request.getParameter("petType") : "" %><%= request.getParameter("ageGroup") != null ? "&ageGroup=" + request.getParameter("ageGroup") : "" %>" class="page-btn"><i class="fas fa-chevron-right"></i></a>
+            <% } else { %>
+            <span class="page-btn disabled"><i class="fas fa-chevron-right"></i></span>
+            <% } %>
         </div>
+        <% } %>
     </div>
 </section>
 
-<footer>
-    <div class="container">
-        <p>&copy; <%= new java.util.Date().getYear() + 1900 %> PetPals | Built with <i class="fas fa-heart"></i> for pets and people</p>
-        <div class="social-links">
-            <a href="#"><i class="fab fa-facebook"></i></a>
-            <a href="#"><i class="fab fa-twitter"></i></a>
-            <a href="#"><i class="fab fa-instagram"></i></a>
-        </div>
-    </div>
-</footer>
-
 <script>
-    // JavaScript for pet filtering and pagination if needed
     document.addEventListener('DOMContentLoaded', function() {
-        // You can add client-side filtering and pagination here if needed
+        // Add event listener to search form
+        const searchForm = document.getElementById('filterForm');
+        const searchInput = searchForm.querySelector('input[name="search"]');
+
+        searchForm.addEventListener('submit', function(e) {
+            // Only submit if search has content or other filters are selected
+            if (searchInput.value.trim() === '' &&
+                (!searchForm.querySelector('select[name="petType"]').value &&
+                    !searchForm.querySelector('select[name="ageGroup"]').value)) {
+                e.preventDefault();
+            }
+        });
     });
 </script>
-</body>
-</html>
+
+<jsp:include page="/WEB-INF/includes/footer.jsp" />
