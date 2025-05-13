@@ -51,7 +51,7 @@ public class DatabaseUtil {
                 // Fallback to hardcoded values
                 JDBC_URL = "jdbc:mysql://localhost:3306/petpals_db";
                 JDBC_USER = "root";
-                JDBC_PASSWORD = "Belbari890";
+                JDBC_PASSWORD = "";
                 JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
                 System.out.println("Using hardcoded database connection values");
                 return;
