@@ -64,24 +64,21 @@ public class PetRepository {
      */
     public Pet findById(int petId) {
         String sql = "SELECT * FROM Pets WHERE pet_id = ?";
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
         Pet pet = null;
 
-        try {
-            conn = DatabaseUtil.getConnection();
-            pstmt = conn.prepareStatement(sql);
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
             pstmt.setInt(1, petId);
-            rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                pet = mapResultSetToPet(rs);
+            
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    pet = mapResultSetToPet(rs);
+                }
             }
         } catch (SQLException e) {
+            System.err.println("Error finding pet by ID: " + e.getMessage());
             e.printStackTrace();
-        } finally {
-            closeResources(rs, pstmt, conn);
         }
 
         return pet;
@@ -97,13 +94,11 @@ public class PetRepository {
         if (doesBadgeColumnExist()) {
             String sql = "INSERT INTO Pets (name, type, breed, age, gender, weight, description, image_url, status, badge) " +
                          "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            Connection conn = null;
-            PreparedStatement pstmt = null;
             boolean success = false;
 
-            try {
-                conn = DatabaseUtil.getConnection();
-                pstmt = conn.prepareStatement(sql);
+            try (Connection conn = DatabaseUtil.getConnection();
+                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                
                 pstmt.setString(1, pet.getName());
                 pstmt.setString(2, pet.getType());
                 pstmt.setString(3, pet.getBreed());
@@ -118,9 +113,8 @@ public class PetRepository {
                 int rowsAffected = pstmt.executeUpdate();
                 success = rowsAffected > 0;
             } catch (SQLException e) {
+                System.err.println("Error saving pet: " + e.getMessage());
                 e.printStackTrace();
-            } finally {
-                closeResources(null, pstmt, conn);
             }
 
             return success;
@@ -138,13 +132,11 @@ public class PetRepository {
     private boolean saveWithoutBadge(Pet pet) {
         String sql = "INSERT INTO Pets (name, type, breed, age, gender, weight, description, image_url, status) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        Connection conn = null;
-        PreparedStatement pstmt = null;
         boolean success = false;
 
-        try {
-            conn = DatabaseUtil.getConnection();
-            pstmt = conn.prepareStatement(sql);
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
             pstmt.setString(1, pet.getName());
             pstmt.setString(2, pet.getType());
             pstmt.setString(3, pet.getBreed());
@@ -158,9 +150,8 @@ public class PetRepository {
             int rowsAffected = pstmt.executeUpdate();
             success = rowsAffected > 0;
         } catch (SQLException e) {
+            System.err.println("Error saving pet without badge: " + e.getMessage());
             e.printStackTrace();
-        } finally {
-            closeResources(null, pstmt, conn);
         }
 
         return success;
@@ -176,13 +167,11 @@ public class PetRepository {
         if (doesBadgeColumnExist()) {
             String sql = "UPDATE Pets SET name = ?, type = ?, breed = ?, age = ?, gender = ?, " +
                          "weight = ?, description = ?, image_url = ?, status = ?, badge = ? WHERE pet_id = ?";
-            Connection conn = null;
-            PreparedStatement pstmt = null;
             boolean success = false;
 
-            try {
-                conn = DatabaseUtil.getConnection();
-                pstmt = conn.prepareStatement(sql);
+            try (Connection conn = DatabaseUtil.getConnection();
+                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                
                 pstmt.setString(1, pet.getName());
                 pstmt.setString(2, pet.getType());
                 pstmt.setString(3, pet.getBreed());
@@ -198,9 +187,8 @@ public class PetRepository {
                 int rowsAffected = pstmt.executeUpdate();
                 success = rowsAffected > 0;
             } catch (SQLException e) {
+                System.err.println("Error updating pet: " + e.getMessage());
                 e.printStackTrace();
-            } finally {
-                closeResources(null, pstmt, conn);
             }
 
             return success;
@@ -218,13 +206,11 @@ public class PetRepository {
     private boolean updateWithoutBadge(Pet pet) {
         String sql = "UPDATE Pets SET name = ?, type = ?, breed = ?, age = ?, gender = ?, " +
                     "weight = ?, description = ?, image_url = ?, status = ? WHERE pet_id = ?";
-        Connection conn = null;
-        PreparedStatement pstmt = null;
         boolean success = false;
 
-        try {
-            conn = DatabaseUtil.getConnection();
-            pstmt = conn.prepareStatement(sql);
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
             pstmt.setString(1, pet.getName());
             pstmt.setString(2, pet.getType());
             pstmt.setString(3, pet.getBreed());
@@ -239,9 +225,8 @@ public class PetRepository {
             int rowsAffected = pstmt.executeUpdate();
             success = rowsAffected > 0;
         } catch (SQLException e) {
+            System.err.println("Error updating pet without badge: " + e.getMessage());
             e.printStackTrace();
-        } finally {
-            closeResources(null, pstmt, conn);
         }
 
         return success;
@@ -254,21 +239,18 @@ public class PetRepository {
      */
     public boolean delete(int petId) {
         String sql = "DELETE FROM Pets WHERE pet_id = ?";
-        Connection conn = null;
-        PreparedStatement pstmt = null;
         boolean success = false;
 
-        try {
-            conn = DatabaseUtil.getConnection();
-            pstmt = conn.prepareStatement(sql);
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
             pstmt.setInt(1, petId);
 
             int rowsAffected = pstmt.executeUpdate();
             success = rowsAffected > 0;
         } catch (SQLException e) {
+            System.err.println("Error deleting pet: " + e.getMessage());
             e.printStackTrace();
-        } finally {
-            closeResources(null, pstmt, conn);
         }
 
         return success;
@@ -280,23 +262,18 @@ public class PetRepository {
      */
     public List<Pet> findAll() {
         String sql = "SELECT * FROM Pets";
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
         List<Pet> pets = new ArrayList<>();
 
-        try {
-            conn = DatabaseUtil.getConnection();
-            pstmt = conn.prepareStatement(sql);
-            rs = pstmt.executeQuery();
-
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+            
             while (rs.next()) {
                 pets.add(mapResultSetToPet(rs));
             }
         } catch (SQLException e) {
+            System.err.println("Error finding all pets: " + e.getMessage());
             e.printStackTrace();
-        } finally {
-            closeResources(rs, pstmt, conn);
         }
 
         return pets;
