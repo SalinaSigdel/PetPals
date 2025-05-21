@@ -326,16 +326,22 @@ public class PetRepository {
             params.add(petType);
         }
 
-        // Add age group filter if provided
+        // Add age group filter if provided - use parameterized queries for age conditions
         if (ageGroup != null && !ageGroup.trim().isEmpty()) {
             if (ageGroup.equals("puppy")) {
-                sqlBuilder.append(" AND age < 1");
+                sqlBuilder.append(" AND CAST(SUBSTRING_INDEX(age, ' ', 1) AS DECIMAL) < ?");
+                params.add(1);
             } else if (ageGroup.equals("young")) {
-                sqlBuilder.append(" AND age >= 1 AND age < 3");
+                sqlBuilder.append(" AND CAST(SUBSTRING_INDEX(age, ' ', 1) AS DECIMAL) >= ? AND CAST(SUBSTRING_INDEX(age, ' ', 1) AS DECIMAL) < ?");
+                params.add(1);
+                params.add(3);
             } else if (ageGroup.equals("adult")) {
-                sqlBuilder.append(" AND age >= 3 AND age < 8");
+                sqlBuilder.append(" AND CAST(SUBSTRING_INDEX(age, ' ', 1) AS DECIMAL) >= ? AND CAST(SUBSTRING_INDEX(age, ' ', 1) AS DECIMAL) < ?");
+                params.add(3);
+                params.add(8);
             } else if (ageGroup.equals("senior")) {
-                sqlBuilder.append(" AND age >= 8");
+                sqlBuilder.append(" AND CAST(SUBSTRING_INDEX(age, ' ', 1) AS DECIMAL) >= ?");
+                params.add(8);
             }
         }
 
@@ -510,20 +516,22 @@ public class PetRepository {
             params.add(petType);
         }
 
-        // Add age group filter if provided
+        // Add age group filter if provided - updated to use same approach as findAvailablePets
         if (ageGroup != null && !ageGroup.trim().isEmpty() && !ageGroup.equals("all")) {
             if (ageGroup.equals("puppy")) {
-                sqlBuilder.append(" AND age LIKE ?");
-                params.add("Puppy%");
+                sqlBuilder.append(" AND CAST(SUBSTRING_INDEX(age, ' ', 1) AS DECIMAL) < ?");
+                params.add(1);
             } else if (ageGroup.equals("young")) {
-                sqlBuilder.append(" AND age LIKE ?");
-                params.add("Young%");
+                sqlBuilder.append(" AND CAST(SUBSTRING_INDEX(age, ' ', 1) AS DECIMAL) >= ? AND CAST(SUBSTRING_INDEX(age, ' ', 1) AS DECIMAL) < ?");
+                params.add(1);
+                params.add(3);
             } else if (ageGroup.equals("adult")) {
-                sqlBuilder.append(" AND age LIKE ?");
-                params.add("Adult%");
+                sqlBuilder.append(" AND CAST(SUBSTRING_INDEX(age, ' ', 1) AS DECIMAL) >= ? AND CAST(SUBSTRING_INDEX(age, ' ', 1) AS DECIMAL) < ?");
+                params.add(3);
+                params.add(8);
             } else if (ageGroup.equals("senior")) {
-                sqlBuilder.append(" AND age LIKE ?");
-                params.add("Senior%");
+                sqlBuilder.append(" AND CAST(SUBSTRING_INDEX(age, ' ', 1) AS DECIMAL) >= ?");
+                params.add(8);
             }
         }
 
@@ -587,20 +595,22 @@ public class PetRepository {
             params.add(petType);
         }
 
-        // Add age group filter if provided
+        // Add age group filter if provided - updated to use same approach as findAvailablePets
         if (ageGroup != null && !ageGroup.trim().isEmpty() && !ageGroup.equals("all")) {
             if (ageGroup.equals("puppy")) {
-                sqlBuilder.append(" AND age LIKE ?");
-                params.add("Puppy%");
+                sqlBuilder.append(" AND CAST(SUBSTRING_INDEX(age, ' ', 1) AS DECIMAL) < ?");
+                params.add(1);
             } else if (ageGroup.equals("young")) {
-                sqlBuilder.append(" AND age LIKE ?");
-                params.add("Young%");
+                sqlBuilder.append(" AND CAST(SUBSTRING_INDEX(age, ' ', 1) AS DECIMAL) >= ? AND CAST(SUBSTRING_INDEX(age, ' ', 1) AS DECIMAL) < ?");
+                params.add(1);
+                params.add(3);
             } else if (ageGroup.equals("adult")) {
-                sqlBuilder.append(" AND age LIKE ?");
-                params.add("Adult%");
+                sqlBuilder.append(" AND CAST(SUBSTRING_INDEX(age, ' ', 1) AS DECIMAL) >= ? AND CAST(SUBSTRING_INDEX(age, ' ', 1) AS DECIMAL) < ?");
+                params.add(3);
+                params.add(8);
             } else if (ageGroup.equals("senior")) {
-                sqlBuilder.append(" AND age LIKE ?");
-                params.add("Senior%");
+                sqlBuilder.append(" AND CAST(SUBSTRING_INDEX(age, ' ', 1) AS DECIMAL) >= ?");
+                params.add(8);
             }
         }
 
