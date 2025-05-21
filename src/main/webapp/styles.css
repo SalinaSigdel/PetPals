@@ -1895,6 +1895,7 @@ body.modal-open {
   padding: 1.5rem;
   border-radius: 10px;
   margin-bottom: 2rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
 .pet-preview img {
@@ -1902,16 +1903,47 @@ body.modal-open {
   height: 120px;
   object-fit: cover;
   border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-.pet-info-preview h3 {
+.pet-info {
+  flex: 1;
+}
+
+.pet-info h3 {
   color: var(--primary-color);
   margin-bottom: 0.5rem;
+  font-size: 1.3rem;
 }
 
-.pet-info-preview p {
+.pet-info p {
   color: #666;
   margin-bottom: 0.25rem;
+}
+
+.pet-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 0.5rem 0;
+}
+
+.pet-stats span {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.pet-stats i {
+  color: var(--primary-color);
+}
+
+.pet-description {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin-top: 0.5rem;
 }
 
 /* Login/Register Page Container */

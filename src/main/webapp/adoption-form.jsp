@@ -73,7 +73,7 @@
                     conn = com.snapgramfx.petpals.util.DatabaseUtil.getConnection();
 
                     // Prepare statement to get pet details
-                    pstmt = conn.prepareStatement("SELECT * FROM pets WHERE id = ?");
+                    pstmt = conn.prepareStatement("SELECT * FROM Pets WHERE pet_id = ?");
                     pstmt.setInt(1, petId);
 
                     // Execute query
@@ -83,9 +83,9 @@
                     if (rs.next()) {
                         petName = rs.getString("name");
                         petBreed = rs.getString("breed");
-                        petAge = rs.getDouble("age");
+                        petAge = rs.getString("age");
                         petGender = rs.getString("gender");
-                        petWeight = rs.getDouble("weight");
+                        petWeight = rs.getString("weight");
                         petDescription = rs.getString("description");
 
                         String imageUrl = rs.getString("image_url");
@@ -114,9 +114,9 @@
                 <h3 id="pet-name"><%= petName %></h3>
                 <p id="pet-breed"><%= petBreed %></p>
                 <div class="pet-stats">
-                    <span><i class="fas fa-clock"></i> <span id="pet-age"><%= petAge < 1 ? String.format("%.1f", petAge * 12) + " months" : String.format("%.1f", petAge) + " years" %></span></span>
+                    <span><i class="fas fa-clock"></i> <span id="pet-age"><%= petAge %></span></span>
                     <span><i class="fas fa-venus-mars"></i> <span id="pet-gender"><%= petGender %></span></span>
-                    <span><i class="fas fa-weight"></i> <span id="pet-weight"><%= petWeight %> kg</span></span>
+                    <span><i class="fas fa-weight"></i> <span id="pet-weight"><%= petWeight %></span></span>
                 </div>
                 <p id="pet-description" class="pet-description"><%= petDescription %></p>
             </div>
