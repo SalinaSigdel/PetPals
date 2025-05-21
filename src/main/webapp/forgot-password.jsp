@@ -12,34 +12,34 @@
       <h2><i class="fas fa-key"></i> Forgot Password</h2>
 
       <%
-      // Display error message if any
-      String errorMessage = (String) request.getAttribute("errorMessage");
-      if (errorMessage != null) {
+        // Display error message if any
+        String errorMessage = (String) request.getAttribute("errorMessage");
+        if (errorMessage != null) {
       %>
-        <div class="error-message">
-          <i class="fas fa-exclamation-circle"></i> <%= errorMessage %>
-        </div>
+      <div class="error-message">
+        <i class="fas fa-exclamation-circle"></i> <%= errorMessage %>
+      </div>
       <% }
 
-      // Display success message if any
-      String successMessage = (String) request.getAttribute("successMessage");
-      if (successMessage != null) {
+        // Display success message if any
+        String successMessage = (String) request.getAttribute("successMessage");
+        if (successMessage != null) {
       %>
-        <div class="success-message">
-          <i class="fas fa-check-circle"></i> <%= successMessage %>
-        </div>
+      <div class="success-message">
+        <i class="fas fa-check-circle"></i> <%= successMessage %>
+      </div>
 
-        <%
+      <%
         // Display reset link for demonstration purposes
         String resetLink = (String) request.getAttribute("resetLink");
         if (resetLink != null) {
-        %>
-          <div class="demo-info">
-            <p><strong>Demo Only:</strong> In a real application, an email would be sent with the reset link.</p>
-            <p>For demonstration purposes, here is your reset link:</p>
-            <a href="<%= resetLink %>" class="reset-link"><%= resetLink %></a>
-          </div>
-        <% } %>
+      %>
+      <div class="demo-info">
+        <p><strong>Demo Only:</strong> In a real application, an email would be sent with the reset link.</p>
+        <p>For demonstration purposes, here is your reset link:</p>
+        <a href="<%= resetLink %>" class="reset-link"><%= resetLink %></a>
+      </div>
+      <% } %>
       <% } else { %>
 
       <p class="auth-info">Enter your email address below and we'll send you a link to reset your password.</p>

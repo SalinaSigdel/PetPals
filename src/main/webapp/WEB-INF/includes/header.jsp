@@ -32,33 +32,33 @@
     if (activePage == null) activePage = "";
     %>
 
-    <header>
-        <div class="container">
-            <h1><i class="fas fa-paw"></i> PetPals</h1>
-            <nav>
-                <% if (isAdmin) { %>
-                <!-- Admin Navigation -->
-                <a href="admin-dashboard" class="<%= "admin".equals(activePage) ? "active" : "" %>"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-                <a href="admin-users" class="<%= "admin-users".equals(activePage) ? "active" : "" %>"><i class="fas fa-users-cog"></i> User Management</a>
-                <a href="admin-pets" class="<%= "admin-pets".equals(activePage) ? "active" : "" %>"><i class="fas fa-paw"></i> Manage Pets</a>
-                <a href="admin-applications" class="<%= "admin-applications".equals(activePage) ? "active" : "" %>"><i class="fas fa-clipboard-list"></i> Applications</a>
-                <a href="admin-adoptions" class="<%= "admin-adoptions".equals(activePage) ? "active" : "" %>"><i class="fas fa-history"></i> Adoption History</a>
-                <a href="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
-                <% } else { %>
-                <!-- Regular User Navigation -->
-                <a href="index.jsp" class="<%= "home".equals(activePage) ? "active" : "" %>"><i class="fas fa-home"></i> Home</a>
-                <a href="adopt" class="<%= "adopt".equals(activePage) ? "active" : "" %>"><i class="fas fa-heart"></i> Adopt</a>
-                <% if (!isLoggedIn) { %>
-                <a href="login.jsp" class="<%= "login".equals(activePage) ? "active" : "" %>"><i class="fas fa-user"></i> Login</a>
-                <a href="register.jsp" class="<%= "register".equals(activePage) ? "active" : "" %>"><i class="fas fa-user-plus"></i> Register</a>
-                <% } else { %>
-                <a href="profile" class="<%= "profile".equals(activePage) ? "active" : "" %>"><i class="fas fa-user-circle"></i> Profile</a>
-                <a href="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
-                <% } %>
-                <a href="about.jsp" class="<%= "about".equals(activePage) ? "active" : "" %>"><i class="fas fa-info-circle"></i> About</a>
-                <% } %>
-            </nav>
-        </div>
-    </header>
+<header>
+    <div class="container">
+        <h1><i class="fas fa-paw"></i> PetPals</h1>
+        <nav>
+            <% if (isAdmin) { %>
+            <!-- Admin Navigation -->
+            <a href="admin-dashboard" class="<%= "admin".equals(activePage) ? "active" : "" %>"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="admin-users" class="<%= "admin-users".equals(activePage) ? "active" : "" %>"><i class="fas fa-users-cog"></i> User Management</a>
+            <a href="admin-pets" class="<%= "admin-pets".equals(activePage) ? "active" : "" %>"><i class="fas fa-paw"></i> Manage Pets</a>
+            <a href="admin-applications" class="<%= "admin-applications".equals(activePage) ? "active" : "" %>"><i class="fas fa-clipboard-list"></i> Applications</a>
+            <a href="admin-adoptions" class="<%= "admin-adoptions".equals(activePage) ? "active" : "" %>"><i class="fas fa-history"></i> Adoption History</a>
+            <a href="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            <% } else { %>
+            <!-- Regular User Navigation -->
+            <a href="index.jsp" class="<%= "home".equals(activePage) ? "active" : "" %>"><i class="fas fa-home"></i> Home</a>
+            <a href="adopt" class="<%= "adopt".equals(activePage) ? "active" : "" %>"><i class="fas fa-heart"></i> Adopt</a>
+            <% if (!isLoggedIn) { %>
+            <a href="login.jsp" class="<%= "login".equals(activePage) ? "active" : "" %>"><i class="fas fa-user"></i> Login</a>
+            <a href="register.jsp" class="<%= "register".equals(activePage) ? "active" : "" %>"><i class="fas fa-user-plus"></i> Register</a>
+            <% } else { %>
+            <a href="profile" class="<%= "profile".equals(activePage) ? "active" : "" %>"><i class="fas fa-user-circle"></i> Profile</a>
+            <a href="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            <% } %>
+            <a href="about.jsp" class="<%= "about".equals(activePage) ? "active" : "" %>"><i class="fas fa-info-circle"></i> About</a>
+            <% } %>
+        </nav>
+    </div>
+</header>
 
-    <div class="content-wrapper">
+<div class="content-wrapper">

@@ -12,13 +12,13 @@
       <h2><i class="fas fa-lock"></i> Reset Password</h2>
 
       <%
-      // Display error message if any
-      String errorMessage = (String) request.getAttribute("errorMessage");
-      if (errorMessage != null) {
+        // Display error message if any
+        String errorMessage = (String) request.getAttribute("errorMessage");
+        if (errorMessage != null) {
       %>
-        <div class="error-message">
-          <i class="fas fa-exclamation-circle"></i> <%= errorMessage %>
-        </div>
+      <div class="error-message">
+        <i class="fas fa-exclamation-circle"></i> <%= errorMessage %>
+      </div>
       <% } %>
 
       <p class="auth-info">Please enter your new password below.</p>

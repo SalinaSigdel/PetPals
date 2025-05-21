@@ -172,7 +172,7 @@
   </style>
 </head>
 <body>
-  <%
+<%
   // Check if user is logged in
   Object userIdObj = session.getAttribute("userId");
   String userRole = (String) session.getAttribute("userRole");
@@ -187,141 +187,141 @@
     response.sendRedirect("pets");
     return;
   }
-  %>
+%>
 
-  <header>
-    <div class="container">
-      <h1><i class="fas fa-paw"></i> PetPals</h1>
-      <nav>
-        <a href="index.jsp"><i class="fas fa-home"></i> Home</a>
-        <a href="adopt.jsp" class="active"><i class="fas fa-heart"></i> Adopt</a>
-        <% if (!isLoggedIn) { %>
-        <a href="login.jsp"><i class="fas fa-user"></i> Login</a>
-        <a href="register.jsp"><i class="fas fa-user-plus"></i> Register</a>
-        <% } else { %>
-        <a href="profile"><i class="fas fa-user-circle"></i> Profile</a>
-        <a href="my-applications"><i class="fas fa-file-alt"></i> My Applications</a>
-        <a href="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
-        <% } %>
-        <a href="about.jsp"><i class="fas fa-info-circle"></i> About</a>
-        <% if (isAdmin) { %>
-        <a href="admindashboard.jsp"><i class="fas fa-tachometer-alt"></i> Admin</a>
-        <% } %>
-      </nav>
+<header>
+  <div class="container">
+    <h1><i class="fas fa-paw"></i> PetPals</h1>
+    <nav>
+      <a href="index.jsp"><i class="fas fa-home"></i> Home</a>
+      <a href="adopt.jsp" class="active"><i class="fas fa-heart"></i> Adopt</a>
+      <% if (!isLoggedIn) { %>
+      <a href="login.jsp"><i class="fas fa-user"></i> Login</a>
+      <a href="register.jsp"><i class="fas fa-user-plus"></i> Register</a>
+      <% } else { %>
+      <a href="profile"><i class="fas fa-user-circle"></i> Profile</a>
+      <a href="my-applications"><i class="fas fa-file-alt"></i> My Applications</a>
+      <a href="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      <% } %>
+      <a href="about.jsp"><i class="fas fa-info-circle"></i> About</a>
+      <% if (isAdmin) { %>
+      <a href="admindashboard.jsp"><i class="fas fa-tachometer-alt"></i> Admin</a>
+      <% } %>
+    </nav>
+  </div>
+</header>
+
+<div class="pet-details-container">
+  <a href="pets" class="btn-back">
+    <i class="fas fa-arrow-left"></i> Back to Pets
+  </a>
+
+  <div class="pet-details-card">
+    <div class="pet-header">
+      <img src="<%= pet.getImageUrl() != null ? pet.getImageUrl() : "" %>" alt="<%= pet.getName() %>" onerror="this.src='https://images.unsplash.com/photo-1517849845537-4d257902454a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'">
+      <div class="pet-status status-<%= pet.getStatus().toLowerCase() %>">
+        <%= pet.getStatus().substring(0, 1).toUpperCase() + pet.getStatus().substring(1) %>
+      </div>
     </div>
-  </header>
 
-  <div class="pet-details-container">
-    <a href="pets" class="btn-back">
-      <i class="fas fa-arrow-left"></i> Back to Pets
-    </a>
+    <div class="pet-content">
+      <h2 class="pet-name"><%= pet.getName() %></h2>
 
-    <div class="pet-details-card">
-      <div class="pet-header">
-        <img src="<%= pet.getImageUrl() != null ? pet.getImageUrl() : "" %>" alt="<%= pet.getName() %>" onerror="this.src='https://images.unsplash.com/photo-1517849845537-4d257902454a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'">
-        <div class="pet-status status-<%= pet.getStatus().toLowerCase() %>">
-          <%= pet.getStatus().substring(0, 1).toUpperCase() + pet.getStatus().substring(1) %>
+      <div class="pet-stats">
+        <div class="pet-stat">
+          <i class="fas fa-paw"></i>
+          <span><%= pet.getType() %></span>
+        </div>
+        <% if (pet.getBreed() != null && !pet.getBreed().isEmpty()) { %>
+        <div class="pet-stat">
+          <i class="fas fa-dog"></i>
+          <span><%= pet.getBreed() %></span>
+        </div>
+        <% } %>
+        <div class="pet-stat">
+          <i class="fas fa-birthday-cake"></i>
+          <span><%= pet.getAge() %></span>
+        </div>
+        <div class="pet-stat">
+          <i class="fas fa-venus-mars"></i>
+          <span><%= pet.getGender() %></span>
+        </div>
+        <% if (pet.getWeight() != null && !pet.getWeight().isEmpty()) { %>
+        <div class="pet-stat">
+          <i class="fas fa-weight"></i>
+          <span><%= pet.getWeight() %></span>
+        </div>
+        <% } %>
+      </div>
+
+      <div class="pet-details-section">
+        <h3 class="section-title">About <%= pet.getName() %></h3>
+        <div class="pet-description">
+          <%= pet.getDescription() %>
         </div>
       </div>
 
-      <div class="pet-content">
-        <h2 class="pet-name"><%= pet.getName() %></h2>
-
-        <div class="pet-stats">
-          <div class="pet-stat">
-            <i class="fas fa-paw"></i>
-            <span><%= pet.getType() %></span>
+      <div class="pet-details-section">
+        <h3 class="section-title">Details</h3>
+        <div class="pet-details-grid">
+          <div class="detail-item">
+            <div class="detail-label">Type</div>
+            <div class="detail-value"><%= pet.getType() %></div>
           </div>
           <% if (pet.getBreed() != null && !pet.getBreed().isEmpty()) { %>
-          <div class="pet-stat">
-            <i class="fas fa-dog"></i>
-            <span><%= pet.getBreed() %></span>
+          <div class="detail-item">
+            <div class="detail-label">Breed</div>
+            <div class="detail-value"><%= pet.getBreed() %></div>
           </div>
           <% } %>
-          <div class="pet-stat">
-            <i class="fas fa-birthday-cake"></i>
-            <span><%= pet.getAge() %></span>
+          <div class="detail-item">
+            <div class="detail-label">Age</div>
+            <div class="detail-value"><%= pet.getAge() %></div>
           </div>
-          <div class="pet-stat">
-            <i class="fas fa-venus-mars"></i>
-            <span><%= pet.getGender() %></span>
+          <div class="detail-item">
+            <div class="detail-label">Gender</div>
+            <div class="detail-value"><%= pet.getGender() %></div>
           </div>
           <% if (pet.getWeight() != null && !pet.getWeight().isEmpty()) { %>
-          <div class="pet-stat">
-            <i class="fas fa-weight"></i>
-            <span><%= pet.getWeight() %></span>
+          <div class="detail-item">
+            <div class="detail-label">Weight</div>
+            <div class="detail-value"><%= pet.getWeight() %></div>
           </div>
           <% } %>
-        </div>
-
-        <div class="pet-details-section">
-          <h3 class="section-title">About <%= pet.getName() %></h3>
-          <div class="pet-description">
-            <%= pet.getDescription() %>
+          <div class="detail-item">
+            <div class="detail-label">Status</div>
+            <div class="detail-value"><%= pet.getStatus().substring(0, 1).toUpperCase() + pet.getStatus().substring(1) %></div>
           </div>
         </div>
-
-        <div class="pet-details-section">
-          <h3 class="section-title">Details</h3>
-          <div class="pet-details-grid">
-            <div class="detail-item">
-              <div class="detail-label">Type</div>
-              <div class="detail-value"><%= pet.getType() %></div>
-            </div>
-            <% if (pet.getBreed() != null && !pet.getBreed().isEmpty()) { %>
-            <div class="detail-item">
-              <div class="detail-label">Breed</div>
-              <div class="detail-value"><%= pet.getBreed() %></div>
-            </div>
-            <% } %>
-            <div class="detail-item">
-              <div class="detail-label">Age</div>
-              <div class="detail-value"><%= pet.getAge() %></div>
-            </div>
-            <div class="detail-item">
-              <div class="detail-label">Gender</div>
-              <div class="detail-value"><%= pet.getGender() %></div>
-            </div>
-            <% if (pet.getWeight() != null && !pet.getWeight().isEmpty()) { %>
-            <div class="detail-item">
-              <div class="detail-label">Weight</div>
-              <div class="detail-value"><%= pet.getWeight() %></div>
-            </div>
-            <% } %>
-            <div class="detail-item">
-              <div class="detail-label">Status</div>
-              <div class="detail-value"><%= pet.getStatus().substring(0, 1).toUpperCase() + pet.getStatus().substring(1) %></div>
-            </div>
-          </div>
-        </div>
-
-        <% if ("available".equals(pet.getStatus())) { %>
-        <form action="apply" method="post" class="pet-actions">
-          <input type="hidden" name="petId" value="<%= pet.getPetId() %>">
-          <% if (isLoggedIn) { %>
-          <button type="submit" class="btn-adopt">
-            <i class="fas fa-heart"></i> Apply to Adopt
-          </button>
-          <% } else { %>
-          <a href="login.jsp" class="btn-adopt">
-            <i class="fas fa-user"></i> Login to Adopt
-          </a>
-          <% } %>
-        </form>
-        <% } %>
       </div>
+
+      <% if ("available".equals(pet.getStatus())) { %>
+      <form action="apply" method="post" class="pet-actions">
+        <input type="hidden" name="petId" value="<%= pet.getPetId() %>">
+        <% if (isLoggedIn) { %>
+        <button type="submit" class="btn-adopt">
+          <i class="fas fa-heart"></i> Apply to Adopt
+        </button>
+        <% } else { %>
+        <a href="login.jsp" class="btn-adopt">
+          <i class="fas fa-user"></i> Login to Adopt
+        </a>
+        <% } %>
+      </form>
+      <% } %>
     </div>
   </div>
+</div>
 
-  <footer>
-    <div class="container">
-      <p>&copy; <%= new java.util.Date().getYear() + 1900 %> PetPals | Built with <i class="fas fa-heart"></i> for pets and people</p>
-      <div class="social-links">
-        <a href="#"><i class="fab fa-facebook"></i></a>
-        <a href="#"><i class="fab fa-twitter"></i></a>
-        <a href="#"><i class="fab fa-instagram"></i></a>
-      </div>
+<footer>
+  <div class="container">
+    <p>&copy; <%= new java.util.Date().getYear() + 1900 %> PetPals | Built with <i class="fas fa-heart"></i> for pets and people</p>
+    <div class="social-links">
+      <a href="#"><i class="fab fa-facebook"></i></a>
+      <a href="#"><i class="fab fa-twitter"></i></a>
+      <a href="#"><i class="fab fa-instagram"></i></a>
     </div>
-  </footer>
+  </div>
+</footer>
 </body>
 </html>

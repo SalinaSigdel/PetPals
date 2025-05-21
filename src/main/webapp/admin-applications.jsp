@@ -43,17 +43,17 @@
       <div class="admin-table-container">
         <table class="admin-table">
           <thead>
-            <tr>
-              <th>ID</th>
-              <th>Pet Name</th>
-              <th>Applicant</th>
-              <th>Date</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
+          <tr>
+            <th>ID</th>
+            <th>Pet Name</th>
+            <th>Applicant</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
           </thead>
           <tbody>
-            <%
+          <%
             List<AdoptionApplication> applications = (List<AdoptionApplication>) request.getAttribute("applications");
             boolean hasApplications = applications != null && !applications.isEmpty();
 
@@ -74,54 +74,54 @@
                 } else if ("rejected".equalsIgnoreCase(status)) {
                   statusClass = "rejected";
                 }
-            %>
-            <tr>
-              <td><%= applicationId %></td>
-              <td><%= petName %></td>
-              <td><%= applicantName %></td>
-              <td><%= applicationDate %></td>
-              <td><span class="status <%= statusClass %>"><%= status %></span></td>
-              <td class="action-group">
-                <a href="application-details?id=<%= applicationId %>" class="btn-action btn-view" title="View Details">
-                  <i class="fas fa-eye"></i>
-                </a>
-                <% if ("pending".equalsIgnoreCase(status)) { %>
-                <form method="post" action="approve-application" style="display:inline;">
-                  <input type="hidden" name="id" value="<%= applicationId %>">
-                  <button type="submit" class="btn-action btn-edit" title="Approve Application">
-                    <i class="fas fa-check"></i>
-                  </button>
-                </form>
-                <form method="post" action="reject-application" style="display:inline;">
-                  <input type="hidden" name="id" value="<%= applicationId %>">
-                  <button type="submit" class="btn-action btn-delete" title="Reject Application">
-                    <i class="fas fa-times"></i>
-                  </button>
-                </form>
-                <% } %>
-              </td>
-            </tr>
-            <%
+          %>
+          <tr>
+            <td><%= applicationId %></td>
+            <td><%= petName %></td>
+            <td><%= applicantName %></td>
+            <td><%= applicationDate %></td>
+            <td><span class="status <%= statusClass %>"><%= status %></span></td>
+            <td class="action-group">
+              <a href="application-details?id=<%= applicationId %>" class="btn-action btn-view" title="View Details">
+                <i class="fas fa-eye"></i>
+              </a>
+              <% if ("pending".equalsIgnoreCase(status)) { %>
+              <form method="post" action="approve-application" style="display:inline;">
+                <input type="hidden" name="id" value="<%= applicationId %>">
+                <button type="submit" class="btn-action btn-edit" title="Approve Application">
+                  <i class="fas fa-check"></i>
+                </button>
+              </form>
+              <form method="post" action="reject-application" style="display:inline;">
+                <input type="hidden" name="id" value="<%= applicationId %>">
+                <button type="submit" class="btn-action btn-delete" title="Reject Application">
+                  <i class="fas fa-times"></i>
+                </button>
+              </form>
+              <% } %>
+            </td>
+          </tr>
+          <%
               }
             }
 
             if (!hasApplications) {
-            %>
-            <tr>
-              <td colspan="6">No applications found</td>
-            </tr>
-            <%
+          %>
+          <tr>
+            <td colspan="6">No applications found</td>
+          </tr>
+          <%
             }
-            %>
+          %>
           </tbody>
         </table>
 
         <%
-        int currentPage = (Integer) request.getAttribute("currentPage");
-        int totalPages = (Integer) request.getAttribute("totalPages");
-        String currentStatus = (String) request.getAttribute("currentStatus");
+          int currentPage = (Integer) request.getAttribute("currentPage");
+          int totalPages = (Integer) request.getAttribute("totalPages");
+          String currentStatus = (String) request.getAttribute("currentStatus");
 
-        if (totalPages > 1) {
+          if (totalPages > 1) {
         %>
         <div class="pagination">
           <% if (currentPage > 1) { %>
@@ -131,10 +131,10 @@
           <% } %>
 
           <%
-          int startPage = Math.max(1, currentPage - 2);
-          int endPage = Math.min(totalPages, startPage + 4);
+            int startPage = Math.max(1, currentPage - 2);
+            int endPage = Math.min(totalPages, startPage + 4);
 
-          for (int i = startPage; i <= endPage; i++) {
+            for (int i = startPage; i <= endPage; i++) {
           %>
           <a href="admin-applications?status=<%= currentStatus %>&page=<%= i %>" class="btn-page <%= (i == currentPage) ? "active" : "" %>"><%= i %></a>
           <% } %>

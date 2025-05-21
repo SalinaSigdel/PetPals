@@ -42,17 +42,17 @@
       <div class="admin-table-container">
         <table class="admin-table">
           <thead>
-            <tr>
-              <th>ID</th>
-              <th>Pet</th>
-              <th>Adopter</th>
-              <th>Date</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
+          <tr>
+            <th>ID</th>
+            <th>Pet</th>
+            <th>Adopter</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
           </thead>
           <tbody>
-            <%
+          <%
             List<Adoption> adoptions = (List<Adoption>) request.getAttribute("adoptions");
             boolean hasAdoptions = adoptions != null && !adoptions.isEmpty();
 
@@ -73,48 +73,48 @@
                 } else if ("returned".equalsIgnoreCase(status)) {
                   statusClass = "rejected";
                 }
-            %>
-            <tr>
-              <td><%= adoptionId %></td>
-              <td><%= petName %></td>
-              <td><%= adopterName %></td>
-              <td><%= adoptionDate %></td>
-              <td><span class="status <%= statusClass %>"><%= status %></span></td>
-              <td class="action-group">
-                <a href="adoption-details?id=<%= adoptionId %>" class="btn-action btn-view" title="View Details">
-                  <i class="fas fa-eye"></i>
-                </a>
-                <% if ("completed".equalsIgnoreCase(status)) { %>
-                <form method="post" action="return-pet" style="display:inline;" onsubmit="return confirm('Are you sure you want to mark this pet as returned?');">
-                  <input type="hidden" name="id" value="<%= adoptionId %>">
-                  <button type="submit" class="btn-action btn-delete" title="Mark as Returned">
-                    <i class="fas fa-undo"></i>
-                  </button>
-                </form>
-                <% } %>
-              </td>
-            </tr>
-            <%
+          %>
+          <tr>
+            <td><%= adoptionId %></td>
+            <td><%= petName %></td>
+            <td><%= adopterName %></td>
+            <td><%= adoptionDate %></td>
+            <td><span class="status <%= statusClass %>"><%= status %></span></td>
+            <td class="action-group">
+              <a href="adoption-details?id=<%= adoptionId %>" class="btn-action btn-view" title="View Details">
+                <i class="fas fa-eye"></i>
+              </a>
+              <% if ("completed".equalsIgnoreCase(status)) { %>
+              <form method="post" action="return-pet" style="display:inline;" onsubmit="return confirm('Are you sure you want to mark this pet as returned?');">
+                <input type="hidden" name="id" value="<%= adoptionId %>">
+                <button type="submit" class="btn-action btn-delete" title="Mark as Returned">
+                  <i class="fas fa-undo"></i>
+                </button>
+              </form>
+              <% } %>
+            </td>
+          </tr>
+          <%
               }
             }
 
             if (!hasAdoptions) {
-            %>
-            <tr>
-              <td colspan="6">No adoption history found</td>
-            </tr>
-            <%
+          %>
+          <tr>
+            <td colspan="6">No adoption history found</td>
+          </tr>
+          <%
             }
-            %>
+          %>
           </tbody>
         </table>
 
         <%
-        int currentPage = (Integer) request.getAttribute("currentPage");
-        int totalPages = (Integer) request.getAttribute("totalPages");
-        String currentStatus = (String) request.getAttribute("currentStatus");
+          int currentPage = (Integer) request.getAttribute("currentPage");
+          int totalPages = (Integer) request.getAttribute("totalPages");
+          String currentStatus = (String) request.getAttribute("currentStatus");
 
-        if (totalPages > 1) {
+          if (totalPages > 1) {
         %>
         <div class="pagination">
           <% if (currentPage > 1) { %>
@@ -124,10 +124,10 @@
           <% } %>
 
           <%
-          int startPage = Math.max(1, currentPage - 2);
-          int endPage = Math.min(totalPages, startPage + 4);
+            int startPage = Math.max(1, currentPage - 2);
+            int endPage = Math.min(totalPages, startPage + 4);
 
-          for (int i = startPage; i <= endPage; i++) {
+            for (int i = startPage; i <= endPage; i++) {
           %>
           <a href="admin-adoptions?status=<%= currentStatus %>&page=<%= i %>" class="btn-page <%= (i == currentPage) ? "active" : "" %>"><%= i %></a>
           <% } %>

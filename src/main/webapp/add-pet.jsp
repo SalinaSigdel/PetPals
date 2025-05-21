@@ -117,116 +117,116 @@
 </style>
 
 <%
-// Check if user is logged in and is an admin
-Object userIdObj = session.getAttribute("userId");
-String userRole = (String) session.getAttribute("userRole");
-boolean isAdmin = (userIdObj != null && "admin".equals(userRole));
+  // Check if user is logged in and is an admin
+  Object userIdObj = session.getAttribute("userId");
+  String userRole = (String) session.getAttribute("userRole");
+  boolean isAdmin = (userIdObj != null && "admin".equals(userRole));
 
 // If not admin, redirect to login
-if (!isAdmin) {
-  response.sendRedirect("login.jsp?error=unauthorized");
-  return;
-}
+  if (!isAdmin) {
+    response.sendRedirect("login.jsp?error=unauthorized");
+    return;
+  }
 %>
 
-  <div class="form-container">
-    <h2 class="form-title"><i class="fas fa-plus-circle"></i> Add New Pet</h2>
+<div class="form-container">
+  <h2 class="form-title"><i class="fas fa-plus-circle"></i> Add New Pet</h2>
 
-    <%
+  <%
     // Display success/error message if any
     String successMessage = (String) request.getAttribute("successMessage");
     String errorMessage = (String) request.getAttribute("errorMessage");
 
     if (successMessage != null) {
-    %>
-      <div class="alert alert-success">
-        <i class="fas fa-check-circle"></i> <%= successMessage %>
-      </div>
-    <% }
+  %>
+  <div class="alert alert-success">
+    <i class="fas fa-check-circle"></i> <%= successMessage %>
+  </div>
+  <% }
 
     if (errorMessage != null) {
-    %>
-      <div class="alert alert-danger">
-        <i class="fas fa-exclamation-circle"></i> <%= errorMessage %>
-      </div>
-    <% } %>
+  %>
+  <div class="alert alert-danger">
+    <i class="fas fa-exclamation-circle"></i> <%= errorMessage %>
+  </div>
+  <% } %>
 
-    <form action="add-pet" method="post" enctype="multipart/form-data">
-      <div class="form-row">
-        <div class="form-group">
-          <label for="name">Pet Name *</label>
-          <input type="text" id="name" name="name" required>
-        </div>
-        <div class="form-group">
-          <label for="type">Pet Type *</label>
-          <select id="type" name="type" required>
-            <option value="">Select Type</option>
-            <option value="dog">Dog</option>
-            <option value="cat">Cat</option>
-            <option value="bird">Bird</option>
-            <option value="rabbit">Rabbit</option>
-            <option value="other">Other</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label for="breed">Breed *</label>
-          <input type="text" id="breed" name="breed" required>
-        </div>
-        <div class="form-group">
-          <label for="age">Age (in years) *</label>
-          <input type="number" id="age" name="age" step="0.1" min="0.1" required>
-        </div>
-      </div>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label for="gender">Gender *</label>
-          <select id="gender" name="gender" required>
-            <option value="">Select Gender</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="weight">Weight (kg) *</label>
-          <input type="number" id="weight" name="weight" step="0.1" min="0.1" required>
-        </div>
-      </div>
-
+  <form action="add-pet" method="post" enctype="multipart/form-data">
+    <div class="form-row">
       <div class="form-group">
-        <label for="description">Description *</label>
-        <textarea id="description" name="description" required></textarea>
+        <label for="name">Pet Name *</label>
+        <input type="text" id="name" name="name" required>
       </div>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label for="petImage">Pet Image</label>
-          <input type="file" id="petImage" name="petImage" accept="image/*">
-          <small class="form-text text-muted">Upload an image of the pet (JPG, PNG, GIF). Max size: 5MB</small>
-        </div>
-        <div class="form-group">
-          <label for="badge">Badge (e.g., New, Featured)</label>
-          <input type="text" id="badge" name="badge">
-        </div>
-      </div>
-
       <div class="form-group">
-        <label for="isAvailable">Availability Status *</label>
-        <select id="isAvailable" name="isAvailable" required>
-          <option value="true">Available for Adoption</option>
-          <option value="false">Not Available</option>
+        <label for="type">Pet Type *</label>
+        <select id="type" name="type" required>
+          <option value="">Select Type</option>
+          <option value="dog">Dog</option>
+          <option value="cat">Cat</option>
+          <option value="bird">Bird</option>
+          <option value="rabbit">Rabbit</option>
+          <option value="other">Other</option>
         </select>
       </div>
+    </div>
 
-      <div class="btn-container">
-        <a href="admin-pets" class="btn btn-secondary">Cancel</a>
-        <button type="submit" class="btn btn-primary">Add Pet</button>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="breed">Breed *</label>
+        <input type="text" id="breed" name="breed" required>
       </div>
-    </form>
-  </div>
+      <div class="form-group">
+        <label for="age">Age (in years) *</label>
+        <input type="number" id="age" name="age" step="0.1" min="0.1" required>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="gender">Gender *</label>
+        <select id="gender" name="gender" required>
+          <option value="">Select Gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="weight">Weight (kg) *</label>
+        <input type="number" id="weight" name="weight" step="0.1" min="0.1" required>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description *</label>
+      <textarea id="description" name="description" required></textarea>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="petImage">Pet Image</label>
+        <input type="file" id="petImage" name="petImage" accept="image/*">
+        <small class="form-text text-muted">Upload an image of the pet (JPG, PNG, GIF). Max size: 5MB</small>
+      </div>
+      <div class="form-group">
+        <label for="badge">Badge (e.g., New, Featured)</label>
+        <input type="text" id="badge" name="badge">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="isAvailable">Availability Status *</label>
+      <select id="isAvailable" name="isAvailable" required>
+        <option value="true">Available for Adoption</option>
+        <option value="false">Not Available</option>
+      </select>
+    </div>
+
+    <div class="btn-container">
+      <a href="admin-pets" class="btn btn-secondary">Cancel</a>
+      <button type="submit" class="btn btn-primary">Add Pet</button>
+    </div>
+  </form>
+</div>
 
 
 

@@ -40,39 +40,39 @@
     if (activePage == null) activePage = "";
     %>
 
-    <header class="admin-header-main">
-        <div class="container">
-            <div class="admin-brand">
-                <h1><i class="fas fa-paw"></i> PetPals Admin</h1>
-            </div>
-            <nav class="admin-nav">
-                <!-- Admin Navigation -->
-                <a href="admin-dashboard" class="admin-nav-item <%= "admin".equals(activePage) ? "active" : "" %>">
-                    <i class="fas fa-tachometer-alt"></i>
-                    <span>Dashboard</span>
-                </a>
-                <a href="admin-users" class="admin-nav-item <%= "admin-users".equals(activePage) ? "active" : "" %>">
-                    <i class="fas fa-users-cog"></i>
-                    <span>User Management</span>
-                </a>
-                <a href="admin-pets" class="admin-nav-item <%= "admin-pets".equals(activePage) ? "active" : "" %>">
-                    <i class="fas fa-paw"></i>
-                    <span>Manage Pets</span>
-                </a>
-                <a href="admin-applications" class="admin-nav-item <%= "admin-applications".equals(activePage) ? "active" : "" %>">
-                    <i class="fas fa-clipboard-list"></i>
-                    <span>Applications</span>
-                </a>
-                <a href="admin-adoptions" class="admin-nav-item <%= "admin-adoptions".equals(activePage) ? "active" : "" %>">
-                    <i class="fas fa-history"></i>
-                    <span>Adoption History</span>
-                </a>
-                <a href="logout" class="admin-nav-item admin-logout">
-                    <i class="fas fa-sign-out-alt"></i>
-                    <span>Logout</span>
-                </a>
-            </nav>
+<header class="admin-header-main">
+    <div class="container">
+        <div class="admin-brand">
+            <h1><i class="fas fa-paw"></i> PetPals Admin</h1>
         </div>
-    </header>
+        <nav class="admin-nav">
+            <!-- Admin Navigation -->
+            <a href="admin-dashboard" class="admin-nav-item <%= "admin".equals(activePage) ? "active" : "" %>">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="admin-users" class="admin-nav-item <%= "admin-users".equals(activePage) ? "active" : "" %>">
+                <i class="fas fa-users-cog"></i>
+                <span>User Management</span>
+            </a>
+            <a href="admin-pets" class="admin-nav-item <%= "admin-pets".equals(activePage) ? "active" : "" %>">
+                <i class="fas fa-paw"></i>
+                <span>Manage Pets</span>
+            </a>
+            <a href="admin-applications" class="admin-nav-item <%= "admin-applications".equals(activePage) ? "active" : "" %>">
+                <i class="fas fa-clipboard-list"></i>
+                <span>Applications</span>
+            </a>
+            <a href="admin-adoptions" class="admin-nav-item <%= "admin-adoptions".equals(activePage) ? "active" : "" %>">
+                <i class="fas fa-history"></i>
+                <span>Adoption History</span>
+            </a>
+            <a href="logout" class="admin-nav-item admin-logout">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </nav>
+    </div>
+</header>
 
-    <div class="admin-content-wrapper">
+<div class="admin-content-wrapper">

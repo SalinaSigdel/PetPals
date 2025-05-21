@@ -37,19 +37,19 @@
       <div class="admin-table-container">
         <table class="admin-table">
           <thead>
-            <tr>
-              <th>ID</th>
-              <th>Image</th>
-              <th>Name</th>
-              <th>Type</th>
-              <th>Breed</th>
-              <th>Age</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
+          <tr>
+            <th>ID</th>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Breed</th>
+            <th>Age</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
           </thead>
           <tbody>
-            <%
+          <%
             List<Pet> pets = (List<Pet>) request.getAttribute("pets");
             boolean hasPets = pets != null && !pets.isEmpty();
 
@@ -78,53 +78,53 @@
                     imageUrl = "https://images.unsplash.com/photo-1517849845537-4d257902454a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60";
                   }
                 }
-            %>
-            <tr>
-              <td><%= petId %></td>
-              <td>
-                <img src="<%= imageUrl %>" alt="<%= petName %>">
-              </td>
-              <td><%= petName %></td>
-              <td><%= petType %></td>
-              <td><%= petBreed %></td>
-              <td><%= petAge %></td>
-              <td>
+          %>
+          <tr>
+            <td><%= petId %></td>
+            <td>
+              <img src="<%= imageUrl %>" alt="<%= petName %>">
+            </td>
+            <td><%= petName %></td>
+            <td><%= petType %></td>
+            <td><%= petBreed %></td>
+            <td><%= petAge %></td>
+            <td>
                 <span class="status <%= isAvailable ? "available" : "adopted" %>">
                   <%= isAvailable ? "Available" : "Adopted" %>
                 </span>
-              </td>
-              <td class="action-group">
-                <a href="edit-pet?id=<%= petId %>" class="btn-action btn-edit" title="Edit Pet">
-                  <i class="fas fa-edit"></i>
-                </a>
-                <form method="post" action="delete-pet" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this pet?');">
-                  <input type="hidden" name="id" value="<%= petId %>">
-                  <button type="submit" class="btn-action btn-delete" title="Delete Pet">
-                    <i class="fas fa-trash"></i>
-                  </button>
-                </form>
-              </td>
-            </tr>
-            <%
+            </td>
+            <td class="action-group">
+              <a href="edit-pet?id=<%= petId %>" class="btn-action btn-edit" title="Edit Pet">
+                <i class="fas fa-edit"></i>
+              </a>
+              <form method="post" action="delete-pet" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this pet?');">
+                <input type="hidden" name="id" value="<%= petId %>">
+                <button type="submit" class="btn-action btn-delete" title="Delete Pet">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </form>
+            </td>
+          </tr>
+          <%
               }
             }
 
             if (!hasPets) {
-            %>
-            <tr>
-              <td colspan="8">No pets found</td>
-            </tr>
-            <%
+          %>
+          <tr>
+            <td colspan="8">No pets found</td>
+          </tr>
+          <%
             }
-            %>
+          %>
           </tbody>
         </table>
 
         <%
-        int currentPage = (Integer) request.getAttribute("currentPage");
-        int totalPages = (Integer) request.getAttribute("totalPages");
+          int currentPage = (Integer) request.getAttribute("currentPage");
+          int totalPages = (Integer) request.getAttribute("totalPages");
 
-        if (totalPages > 1) {
+          if (totalPages > 1) {
         %>
         <div class="pagination">
           <% if (currentPage > 1) { %>
@@ -134,10 +134,10 @@
           <% } %>
 
           <%
-          int startPage = Math.max(1, currentPage - 2);
-          int endPage = Math.min(totalPages, startPage + 4);
+            int startPage = Math.max(1, currentPage - 2);
+            int endPage = Math.min(totalPages, startPage + 4);
 
-          for (int i = startPage; i <= endPage; i++) {
+            for (int i = startPage; i <= endPage; i++) {
           %>
           <a href="admin-pets?page=<%= i %>" class="btn-page <%= (i == currentPage) ? "active" : "" %>"><%= i %></a>
           <% } %>

@@ -103,127 +103,127 @@
         </div>
       </c:if>
 
-    <div class="dashboard-section">
-      <div class="section-header">
-        <h3><i class="fas fa-paw"></i> Current Pet</h3>
-      </div>
-      <div class="pet-preview">
-        <img src="${not empty pet.imageUrl ? pet.imageUrl : defaultImageUrl}" alt="${pet.name}" class="pet-image">
-        <div class="pet-info">
-          <h3>${pet.name}</h3>
-          <p>${pet.breed} (${pet.type})</p>
-          <p>
-            <c:set var="ageValue" value="${Double.parseDouble(pet.age)}" />
-            <c:choose>
-              <c:when test="${ageValue < 1}">
-                <fmt:formatNumber value="${ageValue * 12}" pattern="#.#" /> months
-              </c:when>
-              <c:otherwise>
-                <fmt:formatNumber value="${ageValue}" pattern="#.#" /> years
-              </c:otherwise>
-            </c:choose>
-            old, ${pet.gender}
-          </p>
-          <p>Status: <span class="status ${pet.status eq 'available' ? 'available' : 'adopted'}">${pet.status eq 'available' ? 'Available' : 'Adopted'}</span></p>
+      <div class="dashboard-section">
+        <div class="section-header">
+          <h3><i class="fas fa-paw"></i> Current Pet</h3>
+        </div>
+        <div class="pet-preview">
+          <img src="${not empty pet.imageUrl ? pet.imageUrl : defaultImageUrl}" alt="${pet.name}" class="pet-image">
+          <div class="pet-info">
+            <h3>${pet.name}</h3>
+            <p>${pet.breed} (${pet.type})</p>
+            <p>
+              <c:set var="ageValue" value="${Double.parseDouble(pet.age)}" />
+              <c:choose>
+                <c:when test="${ageValue < 1}">
+                  <fmt:formatNumber value="${ageValue * 12}" pattern="#.#" /> months
+                </c:when>
+                <c:otherwise>
+                  <fmt:formatNumber value="${ageValue}" pattern="#.#" /> years
+                </c:otherwise>
+              </c:choose>
+              old, ${pet.gender}
+            </p>
+            <p>Status: <span class="status ${pet.status eq 'available' ? 'available' : 'adopted'}">${pet.status eq 'available' ? 'Available' : 'Adopted'}</span></p>
+          </div>
         </div>
       </div>
-    </div>
 
-    <form action="edit-pet" method="post" enctype="multipart/form-data">
-      <input type="hidden" name="id" value="${pet.petId}">
+      <form action="edit-pet" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="id" value="${pet.petId}">
 
-      <div class="admin-form-container">
-        <div class="admin-form-section">
-          <h3>Basic Information</h3>
-          <div class="admin-form-row">
-            <div class="admin-form-group">
-              <label for="name">Pet Name *</label>
-              <input type="text" id="name" name="name" value="${pet.name}" required>
+        <div class="admin-form-container">
+          <div class="admin-form-section">
+            <h3>Basic Information</h3>
+            <div class="admin-form-row">
+              <div class="admin-form-group">
+                <label for="name">Pet Name *</label>
+                <input type="text" id="name" name="name" value="${pet.name}" required>
+              </div>
+              <div class="admin-form-group">
+                <label for="type">Pet Type *</label>
+                <select id="type" name="type" required>
+                  <option value="">Select Type</option>
+                  <option value="Dog" ${pet.type eq 'Dog' ? 'selected' : ''}>Dog</option>
+                  <option value="Cat" ${pet.type eq 'Cat' ? 'selected' : ''}>Cat</option>
+                  <option value="Bird" ${pet.type eq 'Bird' ? 'selected' : ''}>Bird</option>
+                  <option value="Rabbit" ${pet.type eq 'Rabbit' ? 'selected' : ''}>Rabbit</option>
+                  <option value="Other" ${pet.type eq 'Other' ? 'selected' : ''}>Other</option>
+                </select>
+              </div>
             </div>
+
+            <div class="admin-form-row">
+              <div class="admin-form-group">
+                <label for="breed">Breed *</label>
+                <input type="text" id="breed" name="breed" value="${pet.breed}" required>
+              </div>
+              <div class="admin-form-group">
+                <label for="age">Age (in years) *</label>
+                <input type="number" id="age" name="age" step="0.1" min="0.1" value="${pet.age}" required>
+              </div>
+            </div>
+
+            <div class="admin-form-row">
+              <div class="admin-form-group">
+                <label for="gender">Gender *</label>
+                <select id="gender" name="gender" required>
+                  <option value="">Select Gender</option>
+                  <option value="Male" ${pet.gender eq 'Male' ? 'selected' : ''}>Male</option>
+                  <option value="Female" ${pet.gender eq 'Female' ? 'selected' : ''}>Female</option>
+                </select>
+              </div>
+              <div class="admin-form-group">
+                <label for="weight">Weight (kg) *</label>
+                <input type="number" id="weight" name="weight" step="0.1" min="0.1" value="${pet.weight}" required>
+              </div>
+            </div>
+          </div>
+
+          <div class="admin-form-section">
+            <h3>Description & Media</h3>
             <div class="admin-form-group">
-              <label for="type">Pet Type *</label>
-              <select id="type" name="type" required>
-                <option value="">Select Type</option>
-                <option value="Dog" ${pet.type eq 'Dog' ? 'selected' : ''}>Dog</option>
-                <option value="Cat" ${pet.type eq 'Cat' ? 'selected' : ''}>Cat</option>
-                <option value="Bird" ${pet.type eq 'Bird' ? 'selected' : ''}>Bird</option>
-                <option value="Rabbit" ${pet.type eq 'Rabbit' ? 'selected' : ''}>Rabbit</option>
-                <option value="Other" ${pet.type eq 'Other' ? 'selected' : ''}>Other</option>
+              <label for="description">Description *</label>
+              <textarea id="description" name="description" required>${pet.description}</textarea>
+            </div>
+
+            <div class="admin-form-row">
+              <div class="admin-form-group">
+                <label for="petImage">Pet Image</label>
+                <input type="file" id="petImage" name="petImage" accept="image/*">
+                <small class="form-text text-muted">Upload a new image or leave empty to keep the current one</small>
+                <c:if test="${not empty pet.imageUrl}">
+                  <div class="current-image-info" style="margin-top: 10px;">
+                    <img src="${pet.imageUrl}" alt="${pet.name}" style="max-width: 150px; max-height: 150px; border-radius: 5px; margin-bottom: 5px;">
+                    <div><small>Current image: ${pet.imageUrl}</small></div>
+                    <input type="hidden" name="currentImageUrl" value="${pet.imageUrl}">
+                  </div>
+                </c:if>
+              </div>
+              <div class="admin-form-group">
+                <label for="badge">Badge (e.g., New, Featured)</label>
+                <input type="text" id="badge" name="badge" value="${pet.getBadge()}">
+              </div>
+            </div>
+          </div>
+
+          <div class="admin-form-section">
+            <h3>Availability</h3>
+            <div class="admin-form-group">
+              <label for="status">Availability Status *</label>
+              <select id="status" name="status" required>
+                <option value="available" ${pet.status eq 'available' ? 'selected' : ''}>Available for Adoption</option>
+                <option value="adopted" ${pet.status eq 'adopted' ? 'selected' : ''}>Not Available</option>
               </select>
             </div>
           </div>
 
-          <div class="admin-form-row">
-            <div class="admin-form-group">
-              <label for="breed">Breed *</label>
-              <input type="text" id="breed" name="breed" value="${pet.breed}" required>
-            </div>
-            <div class="admin-form-group">
-              <label for="age">Age (in years) *</label>
-              <input type="number" id="age" name="age" step="0.1" min="0.1" value="${pet.age}" required>
-            </div>
-          </div>
-
-          <div class="admin-form-row">
-            <div class="admin-form-group">
-              <label for="gender">Gender *</label>
-              <select id="gender" name="gender" required>
-                <option value="">Select Gender</option>
-                <option value="Male" ${pet.gender eq 'Male' ? 'selected' : ''}>Male</option>
-                <option value="Female" ${pet.gender eq 'Female' ? 'selected' : ''}>Female</option>
-              </select>
-            </div>
-            <div class="admin-form-group">
-              <label for="weight">Weight (kg) *</label>
-              <input type="number" id="weight" name="weight" step="0.1" min="0.1" value="${pet.weight}" required>
-            </div>
+          <div class="admin-btn-container">
+            <a href="admin-pets" class="admin-btn-secondary">Cancel</a>
+            <button type="submit" class="admin-btn-primary">Update Pet</button>
           </div>
         </div>
-
-        <div class="admin-form-section">
-          <h3>Description & Media</h3>
-          <div class="admin-form-group">
-            <label for="description">Description *</label>
-            <textarea id="description" name="description" required>${pet.description}</textarea>
-          </div>
-
-          <div class="admin-form-row">
-            <div class="admin-form-group">
-              <label for="petImage">Pet Image</label>
-              <input type="file" id="petImage" name="petImage" accept="image/*">
-              <small class="form-text text-muted">Upload a new image or leave empty to keep the current one</small>
-              <c:if test="${not empty pet.imageUrl}">
-                <div class="current-image-info" style="margin-top: 10px;">
-                  <img src="${pet.imageUrl}" alt="${pet.name}" style="max-width: 150px; max-height: 150px; border-radius: 5px; margin-bottom: 5px;">
-                  <div><small>Current image: ${pet.imageUrl}</small></div>
-                  <input type="hidden" name="currentImageUrl" value="${pet.imageUrl}">
-                </div>
-              </c:if>
-            </div>
-            <div class="admin-form-group">
-              <label for="badge">Badge (e.g., New, Featured)</label>
-              <input type="text" id="badge" name="badge" value="${pet.getBadge()}">
-            </div>
-          </div>
-        </div>
-
-        <div class="admin-form-section">
-          <h3>Availability</h3>
-          <div class="admin-form-group">
-            <label for="status">Availability Status *</label>
-            <select id="status" name="status" required>
-              <option value="available" ${pet.status eq 'available' ? 'selected' : ''}>Available for Adoption</option>
-              <option value="adopted" ${pet.status eq 'adopted' ? 'selected' : ''}>Not Available</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="admin-btn-container">
-          <a href="admin-pets" class="admin-btn-secondary">Cancel</a>
-          <button type="submit" class="admin-btn-primary">Update Pet</button>
-        </div>
-      </div>
-    </form>
+      </form>
     </div>
   </div>
 
