@@ -11,6 +11,51 @@ import java.util.List;
  * Repository class for Pet-related database operations
  */
 public class PetRepository {
+    // Cache for badge column existence to avoid repeated checks
+    private static Boolean badgeColumnExists = null;
+
+    /**
+     * Check if the badge column exists in the Pets table
+     * @return true if exists, false otherwise
+     */
+    private boolean doesBadgeColumnExist() {
+        // Return cached result if already checked
+        if (badgeColumnExists != null) {
+            return badgeColumnExists;
+        }
+
+        Connection conn = null;
+        ResultSet rs = null;
+        boolean exists = false;
+
+        try {
+            conn = DatabaseUtil.getConnection();
+            DatabaseMetaData meta = conn.getMetaData();
+            rs = meta.getColumns(null, null, "Pets", "badge");
+            exists = rs.next();
+            // Cache the result
+            badgeColumnExists = exists;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return exists;
+    }
 
     /**
      * Find a pet by ID
@@ -48,40 +93,40 @@ public class PetRepository {
      * @return true if successful, false otherwise
      */
     public boolean save(Pet pet) {
-        String sql = "INSERT INTO Pets (name, type, breed, age, gender, weight, description, image_url, status, badge) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        boolean success = false;
+        // Check if badge column exists and use appropriate query
+        if (doesBadgeColumnExist()) {
+            String sql = "INSERT INTO Pets (name, type, breed, age, gender, weight, description, image_url, status, badge) " +
+                         "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            Connection conn = null;
+            PreparedStatement pstmt = null;
+            boolean success = false;
 
-        try {
-            conn = DatabaseUtil.getConnection();
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, pet.getName());
-            pstmt.setString(2, pet.getType());
-            pstmt.setString(3, pet.getBreed());
-            pstmt.setString(4, pet.getAge());
-            pstmt.setString(5, pet.getGender());
-            pstmt.setString(6, pet.getWeight());
-            pstmt.setString(7, pet.getDescription());
-            pstmt.setString(8, pet.getImageUrl());
-            pstmt.setString(9, pet.getStatus());
-            pstmt.setString(10, pet.getBadge());
+            try {
+                conn = DatabaseUtil.getConnection();
+                pstmt = conn.prepareStatement(sql);
+                pstmt.setString(1, pet.getName());
+                pstmt.setString(2, pet.getType());
+                pstmt.setString(3, pet.getBreed());
+                pstmt.setString(4, pet.getAge());
+                pstmt.setString(5, pet.getGender());
+                pstmt.setString(6, pet.getWeight());
+                pstmt.setString(7, pet.getDescription());
+                pstmt.setString(8, pet.getImageUrl());
+                pstmt.setString(9, pet.getStatus());
+                pstmt.setString(10, pet.getBadge());
 
-            int rowsAffected = pstmt.executeUpdate();
-            success = rowsAffected > 0;
-        } catch (SQLException e) {
-            // If the badge column doesn't exist yet, try without it
-            if (e.getMessage().contains("Unknown column 'badge'")) {
-                return saveWithoutBadge(pet);
-            } else {
+                int rowsAffected = pstmt.executeUpdate();
+                success = rowsAffected > 0;
+            } catch (SQLException e) {
                 e.printStackTrace();
+            } finally {
+                closeResources(null, pstmt, conn);
             }
-        } finally {
-            closeResources(null, pstmt, conn);
-        }
 
-        return success;
+            return success;
+        } else {
+            return saveWithoutBadge(pet);
+        }
     }
 
     /**
@@ -127,41 +172,41 @@ public class PetRepository {
      * @return true if successful, false otherwise
      */
     public boolean update(Pet pet) {
-        String sql = "UPDATE Pets SET name = ?, type = ?, breed = ?, age = ?, gender = ?, " +
-                    "weight = ?, description = ?, image_url = ?, status = ?, badge = ? WHERE pet_id = ?";
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        boolean success = false;
+        // Check if badge column exists and use appropriate query
+        if (doesBadgeColumnExist()) {
+            String sql = "UPDATE Pets SET name = ?, type = ?, breed = ?, age = ?, gender = ?, " +
+                         "weight = ?, description = ?, image_url = ?, status = ?, badge = ? WHERE pet_id = ?";
+            Connection conn = null;
+            PreparedStatement pstmt = null;
+            boolean success = false;
 
-        try {
-            conn = DatabaseUtil.getConnection();
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, pet.getName());
-            pstmt.setString(2, pet.getType());
-            pstmt.setString(3, pet.getBreed());
-            pstmt.setString(4, pet.getAge());
-            pstmt.setString(5, pet.getGender());
-            pstmt.setString(6, pet.getWeight());
-            pstmt.setString(7, pet.getDescription());
-            pstmt.setString(8, pet.getImageUrl());
-            pstmt.setString(9, pet.getStatus());
-            pstmt.setString(10, pet.getBadge());
-            pstmt.setInt(11, pet.getPetId());
+            try {
+                conn = DatabaseUtil.getConnection();
+                pstmt = conn.prepareStatement(sql);
+                pstmt.setString(1, pet.getName());
+                pstmt.setString(2, pet.getType());
+                pstmt.setString(3, pet.getBreed());
+                pstmt.setString(4, pet.getAge());
+                pstmt.setString(5, pet.getGender());
+                pstmt.setString(6, pet.getWeight());
+                pstmt.setString(7, pet.getDescription());
+                pstmt.setString(8, pet.getImageUrl());
+                pstmt.setString(9, pet.getStatus());
+                pstmt.setString(10, pet.getBadge());
+                pstmt.setInt(11, pet.getPetId());
 
-            int rowsAffected = pstmt.executeUpdate();
-            success = rowsAffected > 0;
-        } catch (SQLException e) {
-            // If the badge column doesn't exist yet, try without it
-            if (e.getMessage().contains("Unknown column 'badge'")) {
-                return updateWithoutBadge(pet);
-            } else {
+                int rowsAffected = pstmt.executeUpdate();
+                success = rowsAffected > 0;
+            } catch (SQLException e) {
                 e.printStackTrace();
+            } finally {
+                closeResources(null, pstmt, conn);
             }
-        } finally {
-            closeResources(null, pstmt, conn);
-        }
 
-        return success;
+            return success;
+        } else {
+            return updateWithoutBadge(pet);
+        }
     }
 
     /**
@@ -342,11 +387,11 @@ public class PetRepository {
         pet.setStatus(rs.getString("status"));
         pet.setCreatedAt(rs.getTimestamp("created_at"));
 
-        // Try to get badge field if it exists in the database
-        try {
+        // Check if badge column exists before trying to read it
+        if (doesBadgeColumnExist()) {
             pet.setBadge(rs.getString("badge"));
-        } catch (SQLException e) {
-            // Badge field might not exist in the database yet, set default value
+        } else {
+            // Badge field doesn't exist in the database yet, set default value
             pet.setBadge("");
         }
 
