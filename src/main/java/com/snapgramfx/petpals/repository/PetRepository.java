@@ -11,51 +11,6 @@ import java.util.List;
  * Repository class for Pet-related database operations
  */
 public class PetRepository {
-    // Cache for badge column existence to avoid repeated checks
-    private static Boolean badgeColumnExists = null;
-
-    /**
-     * Check if the badge column exists in the Pets table
-     * @return true if exists, false otherwise
-     */
-    private boolean doesBadgeColumnExist() {
-        // Return cached result if already checked
-        if (badgeColumnExists != null) {
-            return badgeColumnExists;
-        }
-
-        Connection conn = null;
-        ResultSet rs = null;
-        boolean exists = false;
-
-        try {
-            conn = DatabaseUtil.getConnection();
-            DatabaseMetaData meta = conn.getMetaData();
-            rs = meta.getColumns(null, null, "Pets", "badge");
-            exists = rs.next();
-            // Cache the result
-            badgeColumnExists = exists;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        return exists;
-    }
 
     /**
      * Find a pet by ID
@@ -64,21 +19,24 @@ public class PetRepository {
      */
     public Pet findById(int petId) {
         String sql = "SELECT * FROM Pets WHERE pet_id = ?";
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
         Pet pet = null;
 
-        try (Connection conn = DatabaseUtil.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            
+        try {
+            conn = DatabaseUtil.getConnection();
+            pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, petId);
-            
-            try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
-                    pet = mapResultSetToPet(rs);
-                }
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                pet = mapResultSetToPet(rs);
             }
         } catch (SQLException e) {
-            System.err.println("Error finding pet by ID: " + e.getMessage());
             e.printStackTrace();
+        } finally {
+            closeResources(rs, pstmt, conn);
         }
 
         return pet;
@@ -90,37 +48,40 @@ public class PetRepository {
      * @return true if successful, false otherwise
      */
     public boolean save(Pet pet) {
-        // Check if badge column exists and use appropriate query
-        if (doesBadgeColumnExist()) {
-            String sql = "INSERT INTO Pets (name, type, breed, age, gender, weight, description, image_url, status, badge) " +
-                         "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            boolean success = false;
+        String sql = "INSERT INTO Pets (name, type, breed, age, gender, weight, description, image_url, status, badge) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        boolean success = false;
 
-            try (Connection conn = DatabaseUtil.getConnection();
-                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
-                
-                pstmt.setString(1, pet.getName());
-                pstmt.setString(2, pet.getType());
-                pstmt.setString(3, pet.getBreed());
-                pstmt.setString(4, pet.getAge());
-                pstmt.setString(5, pet.getGender());
-                pstmt.setString(6, pet.getWeight());
-                pstmt.setString(7, pet.getDescription());
-                pstmt.setString(8, pet.getImageUrl());
-                pstmt.setString(9, pet.getStatus());
-                pstmt.setString(10, pet.getBadge());
+        try {
+            conn = DatabaseUtil.getConnection();
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, pet.getName());
+            pstmt.setString(2, pet.getType());
+            pstmt.setString(3, pet.getBreed());
+            pstmt.setString(4, pet.getAge());
+            pstmt.setString(5, pet.getGender());
+            pstmt.setString(6, pet.getWeight());
+            pstmt.setString(7, pet.getDescription());
+            pstmt.setString(8, pet.getImageUrl());
+            pstmt.setString(9, pet.getStatus());
+            pstmt.setString(10, pet.getBadge());
 
-                int rowsAffected = pstmt.executeUpdate();
-                success = rowsAffected > 0;
-            } catch (SQLException e) {
-                System.err.println("Error saving pet: " + e.getMessage());
+            int rowsAffected = pstmt.executeUpdate();
+            success = rowsAffected > 0;
+        } catch (SQLException e) {
+            // If the badge column doesn't exist yet, try without it
+            if (e.getMessage().contains("Unknown column 'badge'")) {
+                return saveWithoutBadge(pet);
+            } else {
                 e.printStackTrace();
             }
-
-            return success;
-        } else {
-            return saveWithoutBadge(pet);
+        } finally {
+            closeResources(null, pstmt, conn);
         }
+
+        return success;
     }
 
     /**
@@ -131,12 +92,14 @@ public class PetRepository {
      */
     private boolean saveWithoutBadge(Pet pet) {
         String sql = "INSERT INTO Pets (name, type, breed, age, gender, weight, description, image_url, status) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        Connection conn = null;
+        PreparedStatement pstmt = null;
         boolean success = false;
 
-        try (Connection conn = DatabaseUtil.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            
+        try {
+            conn = DatabaseUtil.getConnection();
+            pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, pet.getName());
             pstmt.setString(2, pet.getType());
             pstmt.setString(3, pet.getBreed());
@@ -150,8 +113,9 @@ public class PetRepository {
             int rowsAffected = pstmt.executeUpdate();
             success = rowsAffected > 0;
         } catch (SQLException e) {
-            System.err.println("Error saving pet without badge: " + e.getMessage());
             e.printStackTrace();
+        } finally {
+            closeResources(null, pstmt, conn);
         }
 
         return success;
@@ -163,38 +127,41 @@ public class PetRepository {
      * @return true if successful, false otherwise
      */
     public boolean update(Pet pet) {
-        // Check if badge column exists and use appropriate query
-        if (doesBadgeColumnExist()) {
-            String sql = "UPDATE Pets SET name = ?, type = ?, breed = ?, age = ?, gender = ?, " +
-                         "weight = ?, description = ?, image_url = ?, status = ?, badge = ? WHERE pet_id = ?";
-            boolean success = false;
+        String sql = "UPDATE Pets SET name = ?, type = ?, breed = ?, age = ?, gender = ?, " +
+                "weight = ?, description = ?, image_url = ?, status = ?, badge = ? WHERE pet_id = ?";
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        boolean success = false;
 
-            try (Connection conn = DatabaseUtil.getConnection();
-                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
-                
-                pstmt.setString(1, pet.getName());
-                pstmt.setString(2, pet.getType());
-                pstmt.setString(3, pet.getBreed());
-                pstmt.setString(4, pet.getAge());
-                pstmt.setString(5, pet.getGender());
-                pstmt.setString(6, pet.getWeight());
-                pstmt.setString(7, pet.getDescription());
-                pstmt.setString(8, pet.getImageUrl());
-                pstmt.setString(9, pet.getStatus());
-                pstmt.setString(10, pet.getBadge());
-                pstmt.setInt(11, pet.getPetId());
+        try {
+            conn = DatabaseUtil.getConnection();
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, pet.getName());
+            pstmt.setString(2, pet.getType());
+            pstmt.setString(3, pet.getBreed());
+            pstmt.setString(4, pet.getAge());
+            pstmt.setString(5, pet.getGender());
+            pstmt.setString(6, pet.getWeight());
+            pstmt.setString(7, pet.getDescription());
+            pstmt.setString(8, pet.getImageUrl());
+            pstmt.setString(9, pet.getStatus());
+            pstmt.setString(10, pet.getBadge());
+            pstmt.setInt(11, pet.getPetId());
 
-                int rowsAffected = pstmt.executeUpdate();
-                success = rowsAffected > 0;
-            } catch (SQLException e) {
-                System.err.println("Error updating pet: " + e.getMessage());
+            int rowsAffected = pstmt.executeUpdate();
+            success = rowsAffected > 0;
+        } catch (SQLException e) {
+            // If the badge column doesn't exist yet, try without it
+            if (e.getMessage().contains("Unknown column 'badge'")) {
+                return updateWithoutBadge(pet);
+            } else {
                 e.printStackTrace();
             }
-
-            return success;
-        } else {
-            return updateWithoutBadge(pet);
+        } finally {
+            closeResources(null, pstmt, conn);
         }
+
+        return success;
     }
 
     /**
@@ -205,12 +172,14 @@ public class PetRepository {
      */
     private boolean updateWithoutBadge(Pet pet) {
         String sql = "UPDATE Pets SET name = ?, type = ?, breed = ?, age = ?, gender = ?, " +
-                    "weight = ?, description = ?, image_url = ?, status = ? WHERE pet_id = ?";
+                "weight = ?, description = ?, image_url = ?, status = ? WHERE pet_id = ?";
+        Connection conn = null;
+        PreparedStatement pstmt = null;
         boolean success = false;
 
-        try (Connection conn = DatabaseUtil.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            
+        try {
+            conn = DatabaseUtil.getConnection();
+            pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, pet.getName());
             pstmt.setString(2, pet.getType());
             pstmt.setString(3, pet.getBreed());
@@ -225,8 +194,9 @@ public class PetRepository {
             int rowsAffected = pstmt.executeUpdate();
             success = rowsAffected > 0;
         } catch (SQLException e) {
-            System.err.println("Error updating pet without badge: " + e.getMessage());
             e.printStackTrace();
+        } finally {
+            closeResources(null, pstmt, conn);
         }
 
         return success;
@@ -239,18 +209,21 @@ public class PetRepository {
      */
     public boolean delete(int petId) {
         String sql = "DELETE FROM Pets WHERE pet_id = ?";
+        Connection conn = null;
+        PreparedStatement pstmt = null;
         boolean success = false;
 
-        try (Connection conn = DatabaseUtil.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            
+        try {
+            conn = DatabaseUtil.getConnection();
+            pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, petId);
 
             int rowsAffected = pstmt.executeUpdate();
             success = rowsAffected > 0;
         } catch (SQLException e) {
-            System.err.println("Error deleting pet: " + e.getMessage());
             e.printStackTrace();
+        } finally {
+            closeResources(null, pstmt, conn);
         }
 
         return success;
@@ -262,18 +235,23 @@ public class PetRepository {
      */
     public List<Pet> findAll() {
         String sql = "SELECT * FROM Pets";
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
         List<Pet> pets = new ArrayList<>();
 
-        try (Connection conn = DatabaseUtil.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql);
-             ResultSet rs = pstmt.executeQuery()) {
-            
+        try {
+            conn = DatabaseUtil.getConnection();
+            pstmt = conn.prepareStatement(sql);
+            rs = pstmt.executeQuery();
+
             while (rs.next()) {
                 pets.add(mapResultSetToPet(rs));
             }
         } catch (SQLException e) {
-            System.err.println("Error finding all pets: " + e.getMessage());
             e.printStackTrace();
+        } finally {
+            closeResources(rs, pstmt, conn);
         }
 
         return pets;
@@ -303,22 +281,16 @@ public class PetRepository {
             params.add(petType);
         }
 
-        // Add age group filter if provided - use parameterized queries for age conditions
+        // Add age group filter if provided
         if (ageGroup != null && !ageGroup.trim().isEmpty()) {
             if (ageGroup.equals("puppy")) {
-                sqlBuilder.append(" AND CAST(SUBSTRING_INDEX(age, ' ', 1) AS DECIMAL) < ?");
-                params.add(1);
+                sqlBuilder.append(" AND age < 1");
             } else if (ageGroup.equals("young")) {
-                sqlBuilder.append(" AND CAST(SUBSTRING_INDEX(age, ' ', 1) AS DECIMAL) >= ? AND CAST(SUBSTRING_INDEX(age, ' ', 1) AS DECIMAL) < ?");
-                params.add(1);
-                params.add(3);
+                sqlBuilder.append(" AND age >= 1 AND age < 3");
             } else if (ageGroup.equals("adult")) {
-                sqlBuilder.append(" AND CAST(SUBSTRING_INDEX(age, ' ', 1) AS DECIMAL) >= ? AND CAST(SUBSTRING_INDEX(age, ' ', 1) AS DECIMAL) < ?");
-                params.add(3);
-                params.add(8);
+                sqlBuilder.append(" AND age >= 3 AND age < 8");
             } else if (ageGroup.equals("senior")) {
-                sqlBuilder.append(" AND CAST(SUBSTRING_INDEX(age, ' ', 1) AS DECIMAL) >= ?");
-                params.add(8);
+                sqlBuilder.append(" AND age >= 8");
             }
         }
 
@@ -370,11 +342,11 @@ public class PetRepository {
         pet.setStatus(rs.getString("status"));
         pet.setCreatedAt(rs.getTimestamp("created_at"));
 
-        // Check if badge column exists before trying to read it
-        if (doesBadgeColumnExist()) {
+        // Try to get badge field if it exists in the database
+        try {
             pet.setBadge(rs.getString("badge"));
-        } else {
-            // Badge field doesn't exist in the database yet, set default value
+        } catch (SQLException e) {
+            // Badge field might not exist in the database yet, set default value
             pet.setBadge("");
         }
 
@@ -477,7 +449,7 @@ public class PetRepository {
      * @return List of matching pets for the specified page
      */
     public List<Pet> findPetsWithPagination(String search, String petType, String ageGroup, int page, int recordsPerPage) {
-        StringBuilder sqlBuilder = new StringBuilder("SELECT * FROM Pets WHERE 1=1");
+        StringBuilder sqlBuilder = new StringBuilder("SELECT * FROM Pets WHERE status = 'available'");
         List<Object> params = new ArrayList<>();
 
         // Add search condition if provided
@@ -493,22 +465,20 @@ public class PetRepository {
             params.add(petType);
         }
 
-        // Add age group filter if provided - updated to use same approach as findAvailablePets
+        // Add age group filter if provided
         if (ageGroup != null && !ageGroup.trim().isEmpty() && !ageGroup.equals("all")) {
             if (ageGroup.equals("puppy")) {
-                sqlBuilder.append(" AND CAST(SUBSTRING_INDEX(age, ' ', 1) AS DECIMAL) < ?");
-                params.add(1);
+                sqlBuilder.append(" AND age LIKE ?");
+                params.add("Puppy%");
             } else if (ageGroup.equals("young")) {
-                sqlBuilder.append(" AND CAST(SUBSTRING_INDEX(age, ' ', 1) AS DECIMAL) >= ? AND CAST(SUBSTRING_INDEX(age, ' ', 1) AS DECIMAL) < ?");
-                params.add(1);
-                params.add(3);
+                sqlBuilder.append(" AND age LIKE ?");
+                params.add("Young%");
             } else if (ageGroup.equals("adult")) {
-                sqlBuilder.append(" AND CAST(SUBSTRING_INDEX(age, ' ', 1) AS DECIMAL) >= ? AND CAST(SUBSTRING_INDEX(age, ' ', 1) AS DECIMAL) < ?");
-                params.add(3);
-                params.add(8);
+                sqlBuilder.append(" AND age LIKE ?");
+                params.add("Adult%");
             } else if (ageGroup.equals("senior")) {
-                sqlBuilder.append(" AND CAST(SUBSTRING_INDEX(age, ' ', 1) AS DECIMAL) >= ?");
-                params.add(8);
+                sqlBuilder.append(" AND age LIKE ?");
+                params.add("Senior%");
             }
         }
 
@@ -556,7 +526,7 @@ public class PetRepository {
      * @return Total number of matching pets
      */
     public int countPetsWithFilters(String search, String petType, String ageGroup) {
-        StringBuilder sqlBuilder = new StringBuilder("SELECT COUNT(*) FROM Pets WHERE 1=1");
+        StringBuilder sqlBuilder = new StringBuilder("SELECT COUNT(*) FROM Pets WHERE status = 'available'");
         List<Object> params = new ArrayList<>();
 
         // Add search condition if provided
@@ -572,22 +542,20 @@ public class PetRepository {
             params.add(petType);
         }
 
-        // Add age group filter if provided - updated to use same approach as findAvailablePets
+        // Add age group filter if provided
         if (ageGroup != null && !ageGroup.trim().isEmpty() && !ageGroup.equals("all")) {
             if (ageGroup.equals("puppy")) {
-                sqlBuilder.append(" AND CAST(SUBSTRING_INDEX(age, ' ', 1) AS DECIMAL) < ?");
-                params.add(1);
+                sqlBuilder.append(" AND age LIKE ?");
+                params.add("Puppy%");
             } else if (ageGroup.equals("young")) {
-                sqlBuilder.append(" AND CAST(SUBSTRING_INDEX(age, ' ', 1) AS DECIMAL) >= ? AND CAST(SUBSTRING_INDEX(age, ' ', 1) AS DECIMAL) < ?");
-                params.add(1);
-                params.add(3);
+                sqlBuilder.append(" AND age LIKE ?");
+                params.add("Young%");
             } else if (ageGroup.equals("adult")) {
-                sqlBuilder.append(" AND CAST(SUBSTRING_INDEX(age, ' ', 1) AS DECIMAL) >= ? AND CAST(SUBSTRING_INDEX(age, ' ', 1) AS DECIMAL) < ?");
-                params.add(3);
-                params.add(8);
+                sqlBuilder.append(" AND age LIKE ?");
+                params.add("Adult%");
             } else if (ageGroup.equals("senior")) {
-                sqlBuilder.append(" AND CAST(SUBSTRING_INDEX(age, ' ', 1) AS DECIMAL) >= ?");
-                params.add(8);
+                sqlBuilder.append(" AND age LIKE ?");
+                params.add("Senior%");
             }
         }
 

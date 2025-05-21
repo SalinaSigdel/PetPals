@@ -9,10 +9,10 @@ import java.util.Base64;
  * Utility class for password hashing and verification
  */
 public class PasswordUtil {
-    
+
     private static final int SALT_LENGTH = 16;
     private static final String HASH_ALGORITHM = "SHA-256";
-    
+
     /**
      * Generate a random salt for password hashing
      * @return Base64 encoded salt string
@@ -23,7 +23,7 @@ public class PasswordUtil {
         random.nextBytes(salt);
         return Base64.getEncoder().encodeToString(salt);
     }
-    
+
     /**
      * Hash a password with the provided salt
      * @param password The password to hash
@@ -40,7 +40,7 @@ public class PasswordUtil {
             throw new RuntimeException("Error hashing password", e);
         }
     }
-    
+
     /**
      * Verify if a password matches a stored hash
      * @param password The password to verify

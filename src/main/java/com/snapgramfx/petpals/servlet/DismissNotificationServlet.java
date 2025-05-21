@@ -40,10 +40,10 @@ public class DismissNotificationServlet extends HttpServlet {
 
         try {
             int notificationId = Integer.parseInt(notificationIdParam);
-            
+
             // Mark notification as read
             boolean success = notificationService.markAsRead(notificationId);
-            
+
             if (success) {
                 response.setStatus(HttpServletResponse.SC_OK);
             } else {

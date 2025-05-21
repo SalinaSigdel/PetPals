@@ -10,11 +10,11 @@ import java.util.List;
  */
 public class NotificationService {
     private final NotificationRepository notificationRepository;
-    
+
     public NotificationService() {
         this.notificationRepository = new NotificationRepository();
     }
-    
+
     /**
      * Get a notification by ID
      * @param notificationId the notification ID
@@ -23,7 +23,7 @@ public class NotificationService {
     public Notification getNotificationById(int notificationId) {
         return notificationRepository.findById(notificationId);
     }
-    
+
     /**
      * Create a new notification
      * @param notification the notification to create
@@ -32,10 +32,10 @@ public class NotificationService {
     public boolean createNotification(Notification notification) {
         // Set default read status if not specified
         notification.setRead(false);
-        
+
         return notificationRepository.save(notification);
     }
-    
+
     /**
      * Create a notification for application status change
      * @param userId the user ID to notify
@@ -47,7 +47,7 @@ public class NotificationService {
     public boolean createApplicationStatusNotification(int userId, String petName, String status, String message) {
         Notification notification = new Notification();
         notification.setUserId(userId);
-        
+
         if ("approved".equals(status)) {
             notification.setTitle("Adoption Approved");
             notification.setType("success");
@@ -61,12 +61,12 @@ public class NotificationService {
             notification.setType("pending");
             notification.setMessage("Your application to adopt " + petName + " has been updated. " + message);
         }
-        
+
         notification.setRead(false);
-        
+
         return notificationRepository.save(notification);
     }
-    
+
     /**
      * Mark a notification as read
      * @param notificationId the ID of the notification to mark as read
@@ -75,7 +75,7 @@ public class NotificationService {
     public boolean markAsRead(int notificationId) {
         return notificationRepository.markAsRead(notificationId);
     }
-    
+
     /**
      * Mark all notifications for a user as read
      * @param userId the ID of the user
@@ -84,7 +84,7 @@ public class NotificationService {
     public boolean markAllAsRead(int userId) {
         return notificationRepository.markAllAsRead(userId);
     }
-    
+
     /**
      * Get all notifications for a user
      * @param userId the user ID
@@ -93,7 +93,7 @@ public class NotificationService {
     public List<Notification> getNotificationsByUserId(int userId) {
         return notificationRepository.findByUserId(userId);
     }
-    
+
     /**
      * Get unread notifications for a user
      * @param userId the user ID
@@ -102,7 +102,7 @@ public class NotificationService {
     public List<Notification> getUnreadNotificationsByUserId(int userId) {
         return notificationRepository.findUnreadByUserId(userId);
     }
-    
+
     /**
      * Delete a notification
      * @param notificationId the ID of the notification to delete

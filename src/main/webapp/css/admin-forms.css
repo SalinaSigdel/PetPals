@@ -145,12 +145,12 @@
     flex-direction: column;
     gap: 0;
   }
-  
+
   .admin-btn-container {
     flex-direction: column-reverse;
     gap: 0.75rem;
   }
-  
+
   .admin-btn-secondary,
   .admin-btn-primary {
     width: 100%;

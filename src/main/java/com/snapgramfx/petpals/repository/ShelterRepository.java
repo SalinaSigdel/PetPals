@@ -23,13 +23,13 @@ public class ShelterRepository {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         Shelter shelter = null;
-        
+
         try {
             conn = DatabaseUtil.getConnection();
             pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, shelterId);
             rs = pstmt.executeQuery();
-            
+
             if (rs.next()) {
                 shelter = mapResultSetToShelter(rs);
             }
@@ -38,10 +38,10 @@ public class ShelterRepository {
         } finally {
             closeResources(rs, pstmt, conn);
         }
-        
+
         return shelter;
     }
-    
+
     /**
      * Save a new shelter to the database
      * @param shelter the shelter to save
@@ -49,11 +49,11 @@ public class ShelterRepository {
      */
     public boolean save(Shelter shelter) {
         String sql = "INSERT INTO Shelters (name, address, city, state, zip_code, phone, email, website, description) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         Connection conn = null;
         PreparedStatement pstmt = null;
         boolean success = false;
-        
+
         try {
             conn = DatabaseUtil.getConnection();
             pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -66,9 +66,9 @@ public class ShelterRepository {
             pstmt.setString(7, shelter.getEmail());
             pstmt.setString(8, shelter.getWebsite());
             pstmt.setString(9, shelter.getDescription());
-            
+
             int rowsAffected = pstmt.executeUpdate();
-            
+
             if (rowsAffected > 0) {
                 ResultSet rs = pstmt.getGeneratedKeys();
                 if (rs.next()) {
@@ -82,10 +82,10 @@ public class ShelterRepository {
         } finally {
             closeResources(null, pstmt, conn);
         }
-        
+
         return success;
     }
-    
+
     /**
      * Update an existing shelter
      * @param shelter the shelter to update
@@ -93,11 +93,11 @@ public class ShelterRepository {
      */
     public boolean update(Shelter shelter) {
         String sql = "UPDATE Shelters SET name = ?, address = ?, city = ?, state = ?, zip_code = ?, " +
-                    "phone = ?, email = ?, website = ?, description = ? WHERE shelter_id = ?";
+                "phone = ?, email = ?, website = ?, description = ? WHERE shelter_id = ?";
         Connection conn = null;
         PreparedStatement pstmt = null;
         boolean success = false;
-        
+
         try {
             conn = DatabaseUtil.getConnection();
             pstmt = conn.prepareStatement(sql);
@@ -111,7 +111,7 @@ public class ShelterRepository {
             pstmt.setString(8, shelter.getWebsite());
             pstmt.setString(9, shelter.getDescription());
             pstmt.setInt(10, shelter.getShelterId());
-            
+
             int rowsAffected = pstmt.executeUpdate();
             success = rowsAffected > 0;
         } catch (SQLException e) {
@@ -119,10 +119,10 @@ public class ShelterRepository {
         } finally {
             closeResources(null, pstmt, conn);
         }
-        
+
         return success;
     }
-    
+
     /**
      * Delete a shelter by ID
      * @param shelterId the ID of the shelter to delete
@@ -133,12 +133,12 @@ public class ShelterRepository {
         Connection conn = null;
         PreparedStatement pstmt = null;
         boolean success = false;
-        
+
         try {
             conn = DatabaseUtil.getConnection();
             pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, shelterId);
-            
+
             int rowsAffected = pstmt.executeUpdate();
             success = rowsAffected > 0;
         } catch (SQLException e) {
@@ -146,10 +146,10 @@ public class ShelterRepository {
         } finally {
             closeResources(null, pstmt, conn);
         }
-        
+
         return success;
     }
-    
+
     /**
      * Get all shelters
      * @return List of all shelters
@@ -160,12 +160,12 @@ public class ShelterRepository {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         List<Shelter> shelters = new ArrayList<>();
-        
+
         try {
             conn = DatabaseUtil.getConnection();
             pstmt = conn.prepareStatement(sql);
             rs = pstmt.executeQuery();
-            
+
             while (rs.next()) {
                 shelters.add(mapResultSetToShelter(rs));
             }
@@ -174,10 +174,10 @@ public class ShelterRepository {
         } finally {
             closeResources(rs, pstmt, conn);
         }
-        
+
         return shelters;
     }
-    
+
     /**
      * Find shelters by state
      * @param state The state to filter by
@@ -189,13 +189,13 @@ public class ShelterRepository {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         List<Shelter> shelters = new ArrayList<>();
-        
+
         try {
             conn = DatabaseUtil.getConnection();
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, state);
             rs = pstmt.executeQuery();
-            
+
             while (rs.next()) {
                 shelters.add(mapResultSetToShelter(rs));
             }
@@ -204,10 +204,10 @@ public class ShelterRepository {
         } finally {
             closeResources(rs, pstmt, conn);
         }
-        
+
         return shelters;
     }
-    
+
     /**
      * Count total number of shelters
      * @return Total number of shelters
@@ -218,12 +218,12 @@ public class ShelterRepository {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         int count = 0;
-        
+
         try {
             conn = DatabaseUtil.getConnection();
             pstmt = conn.prepareStatement(sql);
             rs = pstmt.executeQuery();
-            
+
             if (rs.next()) {
                 count = rs.getInt(1);
             }
@@ -232,10 +232,10 @@ public class ShelterRepository {
         } finally {
             closeResources(rs, pstmt, conn);
         }
-        
+
         return count;
     }
-    
+
     /**
      * Map a ResultSet to a Shelter object
      * @param rs the ResultSet
@@ -257,7 +257,7 @@ public class ShelterRepository {
         shelter.setCreatedAt(rs.getTimestamp("created_at"));
         return shelter;
     }
-    
+
     /**
      * Close database resources
      * @param rs ResultSet to close

@@ -114,10 +114,10 @@ public class UserRepository {
         String sql;
         if (hasPhoneAndAddress) {
             sql = "INSERT INTO Users (username, password, salt, email, full_name, phone, address, role, email_notifications_enabled) " +
-                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         } else {
             sql = "INSERT INTO Users (username, password, salt, email, full_name, role, email_notifications_enabled) " +
-                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
+                    "VALUES (?, ?, ?, ?, ?, ?, ?)";
         }
 
         Connection conn = null;
@@ -174,10 +174,10 @@ public class UserRepository {
         String sql;
         if (hasPhoneAndAddress) {
             sql = "UPDATE Users SET username = ?, password = ?, salt = ?, email = ?, full_name = ?, " +
-                 "phone = ?, address = ?, role = ?, email_notifications_enabled = ? WHERE user_id = ?";
+                    "phone = ?, address = ?, role = ?, email_notifications_enabled = ? WHERE user_id = ?";
         } else {
             sql = "UPDATE Users SET username = ?, password = ?, salt = ?, email = ?, full_name = ?, " +
-                 "role = ?, email_notifications_enabled = ? WHERE user_id = ?";
+                    "role = ?, email_notifications_enabled = ? WHERE user_id = ?";
         }
 
         Connection conn = null;

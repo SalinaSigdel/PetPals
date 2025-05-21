@@ -85,28 +85,28 @@ public class AdoptionApplicationService {
 
                 // Send notification to user about approved adoption
                 notificationService.createApplicationStatusNotification(
-                    application.getUserId(),
-                    petName,
-                    status,
-                    "Please check your email for next steps or contact the shelter for more information."
+                        application.getUserId(),
+                        petName,
+                        status,
+                        "Please check your email for next steps or contact the shelter for more information."
                 );
             } else if ("rejected".equals(status)) {
                 petService.updatePetStatus(application.getPetId(), "available");
 
                 // Send notification about rejection
                 notificationService.createApplicationStatusNotification(
-                    application.getUserId(),
-                    petName,
-                    status,
-                    rejectionReason != null ? rejectionReason : ""
+                        application.getUserId(),
+                        petName,
+                        status,
+                        rejectionReason != null ? rejectionReason : ""
                 );
             } else {
                 // For other status updates
                 notificationService.createApplicationStatusNotification(
-                    application.getUserId(),
-                    petName,
-                    status,
-                    ""
+                        application.getUserId(),
+                        petName,
+                        status,
+                        ""
                 );
             }
         }

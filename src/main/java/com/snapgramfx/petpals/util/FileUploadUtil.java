@@ -138,7 +138,7 @@ public class FileUploadUtil {
 
         String extension = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
         return extension.equals("jpg") || extension.equals("jpeg") ||
-               extension.equals("png") || extension.equals("gif") ||
-               extension.equals("bmp") || extension.equals("webp");
+                extension.equals("png") || extension.equals("gif") ||
+                extension.equals("bmp") || extension.equals("webp");
     }
 }

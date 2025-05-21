@@ -19,10 +19,10 @@ public class AdoptionRepository {
      */
     public Adoption findById(int adoptionId) {
         String sql = "SELECT a.*, p.name as pet_name, u.full_name as user_name " +
-                     "FROM Adoptions a " +
-                     "JOIN Pets p ON a.pet_id = p.pet_id " +
-                     "JOIN Users u ON a.user_id = u.user_id " +
-                     "WHERE a.adoption_id = ?";
+                "FROM Adoptions a " +
+                "JOIN Pets p ON a.pet_id = p.pet_id " +
+                "JOIN Users u ON a.user_id = u.user_id " +
+                "WHERE a.adoption_id = ?";
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -53,7 +53,7 @@ public class AdoptionRepository {
      */
     public boolean save(Adoption adoption) {
         String sql = "INSERT INTO Adoptions (application_id, user_id, pet_id, status, notes) " +
-                    "VALUES (?, ?, ?, ?, ?)";
+                "VALUES (?, ?, ?, ?, ?)";
         Connection conn = null;
         PreparedStatement pstmt = null;
         boolean success = false;
@@ -121,10 +121,10 @@ public class AdoptionRepository {
      */
     public List<Adoption> findAll() {
         String sql = "SELECT a.*, p.name as pet_name, u.full_name as user_name " +
-                     "FROM Adoptions a " +
-                     "JOIN Pets p ON a.pet_id = p.pet_id " +
-                     "JOIN Users u ON a.user_id = u.user_id " +
-                     "ORDER BY a.adoption_date DESC";
+                "FROM Adoptions a " +
+                "JOIN Pets p ON a.pet_id = p.pet_id " +
+                "JOIN Users u ON a.user_id = u.user_id " +
+                "ORDER BY a.adoption_date DESC";
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -154,10 +154,10 @@ public class AdoptionRepository {
      */
     public Adoption findByApplicationId(int applicationId) {
         String sql = "SELECT a.*, p.name as pet_name, u.full_name as user_name " +
-                     "FROM Adoptions a " +
-                     "JOIN Pets p ON a.pet_id = p.pet_id " +
-                     "JOIN Users u ON a.user_id = u.user_id " +
-                     "WHERE a.application_id = ?";
+                "FROM Adoptions a " +
+                "JOIN Pets p ON a.pet_id = p.pet_id " +
+                "JOIN Users u ON a.user_id = u.user_id " +
+                "WHERE a.application_id = ?";
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -188,11 +188,11 @@ public class AdoptionRepository {
      */
     public List<Adoption> findByUserId(int userId) {
         String sql = "SELECT a.*, p.name as pet_name, u.full_name as user_name " +
-                     "FROM Adoptions a " +
-                     "JOIN Pets p ON a.pet_id = p.pet_id " +
-                     "JOIN Users u ON a.user_id = u.user_id " +
-                     "WHERE a.user_id = ? " +
-                     "ORDER BY a.adoption_date DESC";
+                "FROM Adoptions a " +
+                "JOIN Pets p ON a.pet_id = p.pet_id " +
+                "JOIN Users u ON a.user_id = u.user_id " +
+                "WHERE a.user_id = ? " +
+                "ORDER BY a.adoption_date DESC";
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -250,8 +250,8 @@ public class AdoptionRepository {
      */
     public double calculateSuccessRate() {
         String sql = "SELECT " +
-                     "(COUNT(CASE WHEN status = 'completed' THEN 1 END) * 100.0 / COUNT(*)) " +
-                     "FROM Adoptions";
+                "(COUNT(CASE WHEN status = 'completed' THEN 1 END) * 100.0 / COUNT(*)) " +
+                "FROM Adoptions";
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -281,11 +281,11 @@ public class AdoptionRepository {
      */
     public List<Adoption> findRecentAdoptions(int limit) {
         String sql = "SELECT a.*, p.name as pet_name, u.full_name as user_name " +
-                     "FROM Adoptions a " +
-                     "JOIN Pets p ON a.pet_id = p.pet_id " +
-                     "JOIN Users u ON a.user_id = u.user_id " +
-                     "ORDER BY a.adoption_date DESC " +
-                     "LIMIT ?";
+                "FROM Adoptions a " +
+                "JOIN Pets p ON a.pet_id = p.pet_id " +
+                "JOIN Users u ON a.user_id = u.user_id " +
+                "ORDER BY a.adoption_date DESC " +
+                "LIMIT ?";
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -344,11 +344,11 @@ public class AdoptionRepository {
      */
     public List<Adoption> findAllWithPagination(int offset, int limit) {
         String sql = "SELECT a.*, p.name as pet_name, u.full_name as user_name " +
-                     "FROM Adoptions a " +
-                     "JOIN Pets p ON a.pet_id = p.pet_id " +
-                     "JOIN Users u ON a.user_id = u.user_id " +
-                     "ORDER BY a.adoption_date DESC " +
-                     "LIMIT ? OFFSET ?";
+                "FROM Adoptions a " +
+                "JOIN Pets p ON a.pet_id = p.pet_id " +
+                "JOIN Users u ON a.user_id = u.user_id " +
+                "ORDER BY a.adoption_date DESC " +
+                "LIMIT ? OFFSET ?";
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -410,12 +410,12 @@ public class AdoptionRepository {
      */
     public List<Adoption> findByStatusWithPagination(String status, int offset, int limit) {
         String sql = "SELECT a.*, p.name as pet_name, u.full_name as user_name " +
-                     "FROM Adoptions a " +
-                     "JOIN Pets p ON a.pet_id = p.pet_id " +
-                     "JOIN Users u ON a.user_id = u.user_id " +
-                     "WHERE a.status = ? " +
-                     "ORDER BY a.adoption_date DESC " +
-                     "LIMIT ? OFFSET ?";
+                "FROM Adoptions a " +
+                "JOIN Pets p ON a.pet_id = p.pet_id " +
+                "JOIN Users u ON a.user_id = u.user_id " +
+                "WHERE a.status = ? " +
+                "ORDER BY a.adoption_date DESC " +
+                "LIMIT ? OFFSET ?";
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;

@@ -23,7 +23,7 @@ public class User {
     }
 
     public User(int userId, String username, String password, String salt, String email, String fullName,
-              String phone, String address, String role, boolean emailNotificationsEnabled, Timestamp createdAt) {
+                String phone, String address, String role, boolean emailNotificationsEnabled, Timestamp createdAt) {
         this.userId = userId;
         this.username = username;
         this.password = password;

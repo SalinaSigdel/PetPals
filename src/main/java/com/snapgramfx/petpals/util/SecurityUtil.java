@@ -67,10 +67,10 @@ public class SecurityUtil {
 
         // Replace potentially dangerous characters
         return input.replaceAll("<", "&lt;")
-                   .replaceAll(">", "&gt;")
-                   .replaceAll("\"", "&quot;")
-                   .replaceAll("'", "&#x27;")
-                   .replaceAll("/", "&#x2F;");
+                .replaceAll(">", "&gt;")
+                .replaceAll("\"", "&quot;")
+                .replaceAll("'", "&#x27;")
+                .replaceAll("/", "&#x2F;");
     }
 
     /**

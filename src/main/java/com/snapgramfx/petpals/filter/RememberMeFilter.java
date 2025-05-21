@@ -34,29 +34,29 @@ public class RememberMeFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        
+
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
-        
+
         // Get the current session
         HttpSession session = httpRequest.getSession(false);
-        
+
         // Check if user is already logged in
         boolean isLoggedIn = false;
         if (session != null) {
             Object userIdObj = session.getAttribute("userId");
             isLoggedIn = (userIdObj != null);
         }
-        
+
         // If not logged in, check for remember me cookies
         if (!isLoggedIn) {
             String rememberedUsername = CookieUtil.getCookieValue(httpRequest, "remember_username");
             String rememberedToken = CookieUtil.getCookieValue(httpRequest, "remember_token");
-            
+
             // Auto-login if remember me cookie is present
             if (rememberedUsername != null && rememberedToken != null) {
                 User user = userService.authenticateWithToken(rememberedUsername, rememberedToken);
-                
+
                 if (user != null) {
                     // Create session
                     session = httpRequest.getSession(true);
@@ -64,17 +64,17 @@ public class RememberMeFilter implements Filter {
                     session.setAttribute("userId", user.getUserId());
                     session.setAttribute("username", user.getUsername());
                     session.setAttribute("userRole", user.getRole());
-                    
+
                     // Get the requested URL
                     String requestedUrl = httpRequest.getRequestURI();
                     String contextPath = httpRequest.getContextPath();
-                    
+
                     // Check if this is the root or login page
-                    if (requestedUrl.equals(contextPath + "/") || 
-                        requestedUrl.equals(contextPath + "/index.jsp") || 
-                        requestedUrl.equals(contextPath + "/login") || 
-                        requestedUrl.equals(contextPath + "/login.jsp")) {
-                        
+                    if (requestedUrl.equals(contextPath + "/") ||
+                            requestedUrl.equals(contextPath + "/index.jsp") ||
+                            requestedUrl.equals(contextPath + "/login") ||
+                            requestedUrl.equals(contextPath + "/login.jsp")) {
+
                         // Redirect based on role
                         if ("admin".equals(user.getRole())) {
                             httpResponse.sendRedirect(contextPath + "/admin-dashboard");
@@ -87,7 +87,7 @@ public class RememberMeFilter implements Filter {
                 }
             }
         }
-        
+
         // Continue with the request
         chain.doFilter(request, response);
     }

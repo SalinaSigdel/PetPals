@@ -10,11 +10,11 @@ import java.util.List;
  */
 public class ShelterService {
     private final ShelterRepository shelterRepository;
-    
+
     public ShelterService() {
         this.shelterRepository = new ShelterRepository();
     }
-    
+
     /**
      * Get a shelter by ID
      * @param shelterId the shelter ID
@@ -23,7 +23,7 @@ public class ShelterService {
     public Shelter getShelterById(int shelterId) {
         return shelterRepository.findById(shelterId);
     }
-    
+
     /**
      * Add a new shelter
      * @param shelter the shelter to add
@@ -32,7 +32,7 @@ public class ShelterService {
     public boolean addShelter(Shelter shelter) {
         return shelterRepository.save(shelter);
     }
-    
+
     /**
      * Update a shelter's information
      * @param shelter the shelter with updated information
@@ -44,10 +44,10 @@ public class ShelterService {
         if (existingShelter == null) {
             return false;
         }
-        
+
         return shelterRepository.update(shelter);
     }
-    
+
     /**
      * Delete a shelter
      * @param shelterId the ID of the shelter to delete
@@ -56,7 +56,7 @@ public class ShelterService {
     public boolean deleteShelter(int shelterId) {
         return shelterRepository.delete(shelterId);
     }
-    
+
     /**
      * Get all shelters
      * @return List of all shelters
@@ -64,7 +64,7 @@ public class ShelterService {
     public List<Shelter> getAllShelters() {
         return shelterRepository.findAll();
     }
-    
+
     /**
      * Get shelters by state
      * @param state The state to filter by
@@ -73,7 +73,7 @@ public class ShelterService {
     public List<Shelter> getSheltersByState(String state) {
         return shelterRepository.findByState(state);
     }
-    
+
     /**
      * Get total number of shelters
      * @return Total number of shelters

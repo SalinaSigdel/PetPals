@@ -12,14 +12,14 @@ import java.io.IOException;
  * Filter to restrict access to user pages to authenticated users only
  */
 @WebFilter(filterName = "UserAuthFilter", urlPatterns = {
-    "/profile",
-    "/userprofile",
-    "/update-profile",
-    "/my-applications",
-    "/application-details",
-    "/submit-application",
-    "/cancel-application",
-    "/userprofile.jsp"
+        "/profile",
+        "/userprofile",
+        "/update-profile",
+        "/my-applications",
+        "/application-details",
+        "/submit-application",
+        "/cancel-application",
+        "/userprofile.jsp"
 })
 public class UserAuthFilter implements Filter {
 

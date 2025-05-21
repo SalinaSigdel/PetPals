@@ -14,7 +14,7 @@ public class AdoptionApplication {
     private String reasonForAdoption;
     private String rejectionReason;
     private Timestamp createdAt;
-    
+
     // For displaying related information
     private String petName;
     private String userName;
@@ -24,8 +24,8 @@ public class AdoptionApplication {
     }
 
     public AdoptionApplication(int applicationId, int userId, int petId, String status, String applicantName,
-                              String email, String phone, String cityState, String reasonForAdoption,
-                              String rejectionReason, Timestamp createdAt) {
+                               String email, String phone, String cityState, String reasonForAdoption,
+                               String rejectionReason, Timestamp createdAt) {
         this.applicationId = applicationId;
         this.userId = userId;
         this.petId = petId;
@@ -127,7 +127,7 @@ public class AdoptionApplication {
     public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
     }
-    
+
     public String getPetName() {
         return petName;
     }

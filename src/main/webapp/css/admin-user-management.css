@@ -212,18 +212,18 @@
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   .filter-container {
     width: 100%;
     margin-bottom: 10px;
   }
-  
+
   .search-container {
     width: 100%;
     max-width: none;
     margin-bottom: 10px;
   }
-  
+
   .users-table {
     display: block;
     overflow-x: auto;

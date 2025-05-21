@@ -19,10 +19,10 @@ public class AdoptionApplicationRepository {
      */
     public AdoptionApplication findById(int applicationId) {
         String sql = "SELECT a.*, p.name as pet_name, u.full_name as user_name " +
-                     "FROM Adoption_Applications a " +
-                     "JOIN Pets p ON a.pet_id = p.pet_id " +
-                     "JOIN Users u ON a.user_id = u.user_id " +
-                     "WHERE a.application_id = ?";
+                "FROM Adoption_Applications a " +
+                "JOIN Pets p ON a.pet_id = p.pet_id " +
+                "JOIN Users u ON a.user_id = u.user_id " +
+                "WHERE a.application_id = ?";
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -53,7 +53,7 @@ public class AdoptionApplicationRepository {
      */
     public boolean save(AdoptionApplication application) {
         String sql = "INSERT INTO Adoption_Applications (user_id, pet_id, status, applicant_name, email, phone, " +
-                    "city_state, reason_for_adoption) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                "city_state, reason_for_adoption) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         Connection conn = null;
         PreparedStatement pstmt = null;
         boolean success = false;
@@ -157,9 +157,9 @@ public class AdoptionApplicationRepository {
      */
     public List<AdoptionApplication> findAll() {
         String sql = "SELECT a.*, p.name as pet_name, u.full_name as user_name " +
-                     "FROM Adoption_Applications a " +
-                     "JOIN Pets p ON a.pet_id = p.pet_id " +
-                     "JOIN Users u ON a.user_id = u.user_id";
+                "FROM Adoption_Applications a " +
+                "JOIN Pets p ON a.pet_id = p.pet_id " +
+                "JOIN Users u ON a.user_id = u.user_id";
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -189,10 +189,10 @@ public class AdoptionApplicationRepository {
      */
     public List<AdoptionApplication> findByUserId(int userId) {
         String sql = "SELECT a.*, p.name as pet_name, u.full_name as user_name " +
-                     "FROM Adoption_Applications a " +
-                     "JOIN Pets p ON a.pet_id = p.pet_id " +
-                     "JOIN Users u ON a.user_id = u.user_id " +
-                     "WHERE a.user_id = ?";
+                "FROM Adoption_Applications a " +
+                "JOIN Pets p ON a.pet_id = p.pet_id " +
+                "JOIN Users u ON a.user_id = u.user_id " +
+                "WHERE a.user_id = ?";
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -225,12 +225,12 @@ public class AdoptionApplicationRepository {
      */
     public List<AdoptionApplication> findByUserIdWithPagination(int userId, int offset, int limit) {
         String sql = "SELECT a.*, p.name as pet_name, u.full_name as user_name " +
-                     "FROM Adoption_Applications a " +
-                     "JOIN Pets p ON a.pet_id = p.pet_id " +
-                     "JOIN Users u ON a.user_id = u.user_id " +
-                     "WHERE a.user_id = ? " +
-                     "ORDER BY a.created_at DESC " +
-                     "LIMIT ? OFFSET ?";
+                "FROM Adoption_Applications a " +
+                "JOIN Pets p ON a.pet_id = p.pet_id " +
+                "JOIN Users u ON a.user_id = u.user_id " +
+                "WHERE a.user_id = ? " +
+                "ORDER BY a.created_at DESC " +
+                "LIMIT ? OFFSET ?";
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -293,10 +293,10 @@ public class AdoptionApplicationRepository {
      */
     public List<AdoptionApplication> findByStatus(String status) {
         String sql = "SELECT a.*, p.name as pet_name, u.full_name as user_name " +
-                     "FROM Adoption_Applications a " +
-                     "JOIN Pets p ON a.pet_id = p.pet_id " +
-                     "JOIN Users u ON a.user_id = u.user_id " +
-                     "WHERE a.status = ?";
+                "FROM Adoption_Applications a " +
+                "JOIN Pets p ON a.pet_id = p.pet_id " +
+                "JOIN Users u ON a.user_id = u.user_id " +
+                "WHERE a.status = ?";
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -353,12 +353,12 @@ public class AdoptionApplicationRepository {
      */
     public List<AdoptionApplication> findPendingApplications(int limit) {
         String sql = "SELECT a.*, p.name as pet_name, u.full_name as user_name " +
-                     "FROM Adoption_Applications a " +
-                     "JOIN Pets p ON a.pet_id = p.pet_id " +
-                     "JOIN Users u ON a.user_id = u.user_id " +
-                     "WHERE a.status = 'pending' " +
-                     "ORDER BY a.created_at DESC " +
-                     "LIMIT ?";
+                "FROM Adoption_Applications a " +
+                "JOIN Pets p ON a.pet_id = p.pet_id " +
+                "JOIN Users u ON a.user_id = u.user_id " +
+                "WHERE a.status = 'pending' " +
+                "ORDER BY a.created_at DESC " +
+                "LIMIT ?";
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -454,11 +454,11 @@ public class AdoptionApplicationRepository {
      */
     public List<AdoptionApplication> findAllWithPagination(int offset, int limit) {
         String sql = "SELECT a.*, p.name as pet_name, u.full_name as user_name " +
-                     "FROM Adoption_Applications a " +
-                     "JOIN Pets p ON a.pet_id = p.pet_id " +
-                     "JOIN Users u ON a.user_id = u.user_id " +
-                     "ORDER BY a.created_at DESC " +
-                     "LIMIT ? OFFSET ?";
+                "FROM Adoption_Applications a " +
+                "JOIN Pets p ON a.pet_id = p.pet_id " +
+                "JOIN Users u ON a.user_id = u.user_id " +
+                "ORDER BY a.created_at DESC " +
+                "LIMIT ? OFFSET ?";
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -520,12 +520,12 @@ public class AdoptionApplicationRepository {
      */
     public List<AdoptionApplication> findByStatusWithPagination(String status, int offset, int limit) {
         String sql = "SELECT a.*, p.name as pet_name, u.full_name as user_name " +
-                     "FROM Adoption_Applications a " +
-                     "JOIN Pets p ON a.pet_id = p.pet_id " +
-                     "JOIN Users u ON a.user_id = u.user_id " +
-                     "WHERE a.status = ? " +
-                     "ORDER BY a.created_at DESC " +
-                     "LIMIT ? OFFSET ?";
+                "FROM Adoption_Applications a " +
+                "JOIN Pets p ON a.pet_id = p.pet_id " +
+                "JOIN Users u ON a.user_id = u.user_id " +
+                "WHERE a.status = ? " +
+                "ORDER BY a.created_at DESC " +
+                "LIMIT ? OFFSET ?";
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;

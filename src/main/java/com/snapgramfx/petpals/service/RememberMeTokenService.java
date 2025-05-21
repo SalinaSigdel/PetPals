@@ -27,20 +27,20 @@ public class RememberMeTokenService {
     public String createToken(User user) {
         // Delete any existing tokens for this user
         tokenRepository.deleteByUserId(user.getUserId());
-        
+
         // Generate a new token
         String tokenValue = CookieUtil.generateRememberMeToken(user.getUsername(), user.getUserId(), user.getSalt());
-        
+
         // Create token object
         RememberMeToken token = new RememberMeToken();
         token.setUserId(user.getUserId());
         token.setUsername(user.getUsername());
         token.setToken(tokenValue);
         token.setExpiryDate(CookieUtil.calculateTokenExpiryDate());
-        
+
         // Save token to database
         boolean success = tokenRepository.save(token);
-        
+
         if (success) {
             return tokenValue;
         } else {
@@ -57,10 +57,10 @@ public class RememberMeTokenService {
         if (tokenValue == null || tokenValue.isEmpty()) {
             return -1;
         }
-        
+
         // Find token in database
         RememberMeToken token = tokenRepository.findByToken(tokenValue);
-        
+
         if (token == null || token.isExpired()) {
             // Token not found or expired
             if (token != null) {
@@ -69,7 +69,7 @@ public class RememberMeTokenService {
             }
             return -1;
         }
-        
+
         return token.getUserId();
     }
 
