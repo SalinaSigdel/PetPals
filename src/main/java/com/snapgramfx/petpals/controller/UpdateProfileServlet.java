@@ -49,7 +49,7 @@ public class UpdateProfileServlet extends HttpServlet {
 
         // Validate input
         if (fullName == null || fullName.trim().isEmpty() ||
-            email == null || email.trim().isEmpty()) {
+                email == null || email.trim().isEmpty()) {
 
             out.print("{\"success\": false, \"message\": \"Name and email are required\"}");
             return;

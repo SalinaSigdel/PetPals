@@ -21,13 +21,13 @@ import java.util.List;
  * Controller for handling adoption application-related HTTP requests
  */
 @WebServlet(name = "adoptionController", urlPatterns = {
-    "/adopt",
-    "/adoption-form",
-    "/my-applications",
-    "/application-details",
-    "/adoption-details",
-    "/approve-application",
-    "/reject-application"
+        "/adopt",
+        "/adoption-form",
+        "/my-applications",
+        "/application-details",
+        "/adoption-details",
+        "/approve-application",
+        "/reject-application"
 })
 public class AdoptionApplicationController extends HttpServlet {
     private final AdoptionApplicationService applicationService;
@@ -216,10 +216,10 @@ public class AdoptionApplicationController extends HttpServlet {
 
             // Validate input
             if (applicantName == null || applicantName.trim().isEmpty() ||
-                email == null || email.trim().isEmpty() ||
-                phone == null || phone.trim().isEmpty() ||
-                cityState == null || cityState.trim().isEmpty() ||
-                reasonForAdoption == null || reasonForAdoption.trim().isEmpty()) {
+                    email == null || email.trim().isEmpty() ||
+                    phone == null || phone.trim().isEmpty() ||
+                    cityState == null || cityState.trim().isEmpty() ||
+                    reasonForAdoption == null || reasonForAdoption.trim().isEmpty()) {
 
                 request.setAttribute("errorMessage", "All fields are required");
                 request.setAttribute("pet", pet);
@@ -297,7 +297,7 @@ public class AdoptionApplicationController extends HttpServlet {
 
         // Get applications for the current page
         List<AdoptionApplication> applications = applicationService.getApplicationsByUserIdWithPagination(
-            userId, (page - 1) * recordsPerPage, recordsPerPage);
+                userId, (page - 1) * recordsPerPage, recordsPerPage);
 
         // Set attributes for the view
         request.setAttribute("applications", applications);

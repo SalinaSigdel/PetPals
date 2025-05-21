@@ -19,17 +19,17 @@ import java.util.List;
  * Controller for handling pet-related HTTP requests
  */
 @WebServlet(name = "petController", urlPatterns = {
-    "/pets",
-    "/pet-details",
-    "/add-pet",
-    "/edit-pet",
-    "/delete-pet",
-    "/browse-pets"  // Changed from "/adopt" to avoid conflict
+        "/pets",
+        "/pet-details",
+        "/add-pet",
+        "/edit-pet",
+        "/delete-pet",
+        "/browse-pets"  // Changed from "/adopt" to avoid conflict
 })
 @MultipartConfig(
-    fileSizeThreshold = 1024 * 1024, // 1 MB
-    maxFileSize = 5 * 1024 * 1024,   // 5 MB
-    maxRequestSize = 10 * 1024 * 1024 // 10 MB
+        fileSizeThreshold = 1024 * 1024, // 1 MB
+        maxFileSize = 5 * 1024 * 1024,   // 5 MB
+        maxRequestSize = 10 * 1024 * 1024 // 10 MB
 )
 public class PetController extends HttpServlet {
     private final PetService petService;
@@ -203,8 +203,8 @@ public class PetController extends HttpServlet {
 
         // Validate input
         if (name == null || name.trim().isEmpty() ||
-            type == null || type.trim().isEmpty() ||
-            gender == null || gender.trim().isEmpty()) {
+                type == null || type.trim().isEmpty() ||
+                gender == null || gender.trim().isEmpty()) {
 
             request.setAttribute("errorMessage", "Name, type, and gender are required");
             request.getRequestDispatcher("/add-pet.jsp").forward(request, response);
@@ -328,9 +328,9 @@ public class PetController extends HttpServlet {
 
             // Validate input
             if (name == null || name.trim().isEmpty() ||
-                type == null || type.trim().isEmpty() ||
-                gender == null || gender.trim().isEmpty() ||
-                status == null || status.trim().isEmpty()) {
+                    type == null || type.trim().isEmpty() ||
+                    gender == null || gender.trim().isEmpty() ||
+                    status == null || status.trim().isEmpty()) {
 
                 request.setAttribute("errorMessage", "Name, type, gender, and status are required");
                 request.setAttribute("pet", pet);

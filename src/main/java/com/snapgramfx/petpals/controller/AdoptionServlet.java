@@ -78,10 +78,10 @@ public class AdoptionServlet extends HttpServlet {
 
             // Validate input
             if (applicantName == null || applicantName.trim().isEmpty() ||
-                email == null || email.trim().isEmpty() ||
-                phone == null || phone.trim().isEmpty() ||
-                cityState == null || cityState.trim().isEmpty() ||
-                reasonForAdoption == null || reasonForAdoption.trim().isEmpty()) {
+                    email == null || email.trim().isEmpty() ||
+                    phone == null || phone.trim().isEmpty() ||
+                    cityState == null || cityState.trim().isEmpty() ||
+                    reasonForAdoption == null || reasonForAdoption.trim().isEmpty()) {
 
                 request.setAttribute("errorMessage", "All fields are required");
                 request.setAttribute("pet", pet);

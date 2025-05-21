@@ -17,22 +17,22 @@ import java.util.List;
  * Controller for handling notification-related HTTP requests
  */
 @WebServlet(name = "notificationController", urlPatterns = {
-    "/notifications",
-    "/mark-notification-read",
-    "/mark-all-notifications-read",
-    "/delete-notification"
+        "/notifications",
+        "/mark-notification-read",
+        "/mark-all-notifications-read",
+        "/delete-notification"
 })
 public class NotificationController extends HttpServlet {
     private final NotificationService notificationService;
-    
+
     public NotificationController() {
         this.notificationService = new NotificationService();
     }
-    
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String path = request.getServletPath();
-        
+
         switch (path) {
             case "/notifications":
                 // Show user's notifications
@@ -55,7 +55,7 @@ public class NotificationController extends HttpServlet {
                 break;
         }
     }
-    
+
     /**
      * Handle notifications view
      */
@@ -66,19 +66,19 @@ public class NotificationController extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
-        
+
         int userId = (int) session.getAttribute("userId");
-        
+
         // Get user's notifications
         List<Notification> notifications = notificationService.getNotificationsByUserId(userId);
-        
+
         // Set attributes for the view
         request.setAttribute("notifications", notifications);
-        
+
         // Forward to the view
         request.getRequestDispatcher("/notifications.jsp").forward(request, response);
     }
-    
+
     /**
      * Handle marking a notification as read
      */
@@ -89,19 +89,19 @@ public class NotificationController extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
-        
+
         String notificationIdParam = request.getParameter("id");
         String redirectUrl = request.getParameter("redirect");
-        
+
         if (notificationIdParam == null || notificationIdParam.trim().isEmpty()) {
             response.sendRedirect(request.getContextPath() + "/notifications");
             return;
         }
-        
+
         try {
             int notificationId = Integer.parseInt(notificationIdParam);
             notificationService.markAsRead(notificationId);
-            
+
             // Redirect to the specified URL or to notifications page
             if (redirectUrl != null && !redirectUrl.trim().isEmpty()) {
                 response.sendRedirect(redirectUrl);
@@ -112,7 +112,7 @@ public class NotificationController extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/notifications");
         }
     }
-    
+
     /**
      * Handle marking all notifications as read
      */
@@ -123,16 +123,16 @@ public class NotificationController extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
-        
+
         int userId = (int) session.getAttribute("userId");
-        
+
         // Mark all notifications as read
         notificationService.markAllAsRead(userId);
-        
+
         // Redirect to notifications page
         response.sendRedirect(request.getContextPath() + "/notifications");
     }
-    
+
     /**
      * Handle deleting a notification
      */
@@ -143,18 +143,18 @@ public class NotificationController extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
-        
+
         String notificationIdParam = request.getParameter("id");
-        
+
         if (notificationIdParam == null || notificationIdParam.trim().isEmpty()) {
             response.sendRedirect(request.getContextPath() + "/notifications");
             return;
         }
-        
+
         try {
             int notificationId = Integer.parseInt(notificationIdParam);
             notificationService.deleteNotification(notificationId);
-            
+
             // Redirect to notifications page
             response.sendRedirect(request.getContextPath() + "/notifications");
         } catch (NumberFormatException e) {

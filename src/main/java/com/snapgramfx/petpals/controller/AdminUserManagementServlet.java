@@ -18,10 +18,10 @@ import java.util.List;
  * Controller for handling admin user management
  */
 @WebServlet(name = "adminUserManagementServlet", urlPatterns = {
-    "/admin-users",
-    "/admin-edit-user",
-    "/admin-delete-user",
-    "/admin-update-user"
+        "/admin-users",
+        "/admin-edit-user",
+        "/admin-delete-user",
+        "/admin-update-user"
 })
 public class AdminUserManagementServlet extends HttpServlet {
     private final UserService userService;
@@ -29,6 +29,8 @@ public class AdminUserManagementServlet extends HttpServlet {
     public AdminUserManagementServlet() {
         this.userService = new UserService();
     }
+
+
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -209,7 +211,7 @@ public class AdminUserManagementServlet extends HttpServlet {
 
             // Validate form data
             if (username == null || username.isEmpty() || email == null || email.isEmpty() ||
-                fullName == null || fullName.isEmpty() || role == null || role.isEmpty()) {
+                    fullName == null || fullName.isEmpty() || role == null || role.isEmpty()) {
                 request.setAttribute("errorMessage", "All fields are required");
                 request.setAttribute("user", user);
                 request.getRequestDispatcher("/admin-edit-user.jsp").forward(request, response);

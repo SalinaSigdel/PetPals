@@ -27,11 +27,11 @@ import java.util.List;
  * Controller for handling user-related HTTP requests
  */
 @WebServlet(name = "userController", urlPatterns = {
-    "/login",
-    "/register",
-    "/logout",
-    "/profile",
-    "/update-profile"
+        "/login",
+        "/register",
+        "/logout",
+        "/profile",
+        "/update-profile"
 })
 public class UserController extends HttpServlet {
     private final UserService userService;
@@ -184,10 +184,10 @@ public class UserController extends HttpServlet {
 
         // Validate input
         if (username == null || username.trim().isEmpty() ||
-            password == null || password.trim().isEmpty() ||
-            confirmPassword == null || confirmPassword.trim().isEmpty() ||
-            email == null || email.trim().isEmpty() ||
-            fullName == null || fullName.trim().isEmpty()) {
+                password == null || password.trim().isEmpty() ||
+                confirmPassword == null || confirmPassword.trim().isEmpty() ||
+                email == null || email.trim().isEmpty() ||
+                fullName == null || fullName.trim().isEmpty()) {
 
             request.setAttribute("errorMessage", "All fields are required");
             request.getRequestDispatcher("/register.jsp").forward(request, response);
@@ -366,8 +366,8 @@ public class UserController extends HttpServlet {
 
         // Update password if provided
         if (currentPassword != null && !currentPassword.trim().isEmpty() &&
-            newPassword != null && !newPassword.trim().isEmpty() &&
-            confirmNewPassword != null && !confirmNewPassword.trim().isEmpty()) {
+                newPassword != null && !newPassword.trim().isEmpty() &&
+                confirmNewPassword != null && !confirmNewPassword.trim().isEmpty()) {
 
             // Verify current password using SecurityUtil
             if (!SecurityUtil.verifyPassword(currentPassword, user.getPassword(), user.getSalt())) {
