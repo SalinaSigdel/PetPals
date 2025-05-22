@@ -86,6 +86,10 @@ public class PetController extends HttpServlet {
                 // Handle edit pet form submission
                 handleEditPet(request, response);
                 break;
+            case "/delete-pet":
+                // Handle pet deletion
+                handleDeletePet(request, response);
+                break;
             default:
                 response.sendRedirect(request.getContextPath() + "/");
                 break;
