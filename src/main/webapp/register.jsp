@@ -21,7 +21,7 @@
 
     <%
       // Display error message if registration failed
-      String errorMessage = (String) request.getAttribute("registerError");
+      String errorMessage = (String) request.getAttribute("errorMessage");
       if (errorMessage != null) {
     %>
     <div class="error-message">

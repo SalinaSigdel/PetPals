@@ -5,8 +5,11 @@
 <%
   // Get redirect URL if any
   String redirectUrl = request.getParameter("redirect");
-  String successMessage = request.getParameter("success");
-
+  // We'll handle success message later in the page
+  
+  // For debugging
+  System.out.println("Success message parameter: " + request.getParameter("success"));
+  
 // Redirect if already logged in
   Object userIdObj = session.getAttribute("userId");
   if (userIdObj != null) {
@@ -58,6 +61,12 @@
         session.removeAttribute("loginError");
       }
 
+      // Get success message from request attribute first, then from URL parameter
+      String successMessage = (String) request.getAttribute("successMessage");
+      if (successMessage == null) {
+        successMessage = request.getParameter("success");
+      }
+      
       // Display success message if any
       if (successMessage != null) {
     %>
@@ -100,10 +109,16 @@
           document.querySelector('input[name="username"]').value = rememberedUsername;
           document.getElementById('remember').checked = true;
         }
-
-        // Remove any password strength indicators that might be created
+        
+        // Debug the success message parameter
         document.addEventListener('DOMContentLoaded', function() {
-          // Function to remove password strength indicators
+          const successParam = '<%= request.getParameter("success") %>';
+          console.log("Success parameter:", successParam);
+          if (successParam && successParam !== 'null') {
+            console.log("Success message found:", successParam);
+          }
+          
+          // Remove any password strength indicators that might be created
           function removePasswordStrength() {
             const strengthIndicators = document.querySelectorAll('.password-strength');
             strengthIndicators.forEach(indicator => {

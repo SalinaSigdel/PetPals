@@ -219,7 +219,6 @@ public class UserController extends HttpServlet {
         username = SecurityUtil.sanitizeInput(username);
         email = SecurityUtil.sanitizeInput(email);
         fullName = SecurityUtil.sanitizeInput(fullName);
-        // Don't sanitize password as it will be hashed
 
         // Check if passwords match
         if (!password.equals(confirmPassword)) {
@@ -228,20 +227,20 @@ public class UserController extends HttpServlet {
             return;
         }
 
-        // Create user object
-        User user = new User();
-        user.setUsername(username);
-        user.setPassword(password); // Will be hashed in the service layer
-        user.setEmail(email);
-        user.setFullName(fullName);
-        user.setRole("adopter"); // Default role
-        user.setEmailNotificationsEnabled(true); // Default setting
+        // Create new user
+        User newUser = new User();
+        newUser.setUsername(username);
+        newUser.setPassword(password); // Will be hashed in service
+        newUser.setEmail(email);
+        newUser.setFullName(fullName);
+        newUser.setRole("adopter"); // Default role for new users
+        newUser.setEmailNotificationsEnabled(true); // Default to enabled
 
         // Register user
-        boolean success = userService.registerUser(user);
+        boolean success = userService.registerUser(newUser);
 
         if (success) {
-            // Redirect to login page with success message
+            // Set success message and forward to login page
             request.setAttribute("successMessage", "Registration successful! Please log in.");
             request.getRequestDispatcher("/login.jsp").forward(request, response);
         } else {
