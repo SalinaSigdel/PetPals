@@ -201,8 +201,14 @@
                 </c:if>
               </div>
               <div class="admin-form-group">
-                <label for="badge">Badge (e.g., New, Featured)</label>
-                <input type="text" id="badge" name="badge" value="${pet.getBadge()}">
+                <label for="badge">Badge</label>
+                <select id="badge" name="badge">
+                  <option value="" ${empty pet.getBadge() ? 'selected' : ''}>All Ages</option>
+                  <option value="Puppy/Kitten" ${pet.getBadge() eq 'Puppy/Kitten' ? 'selected' : ''}>Puppy/Kitten</option>
+                  <option value="Young" ${pet.getBadge() eq 'Young' ? 'selected' : ''}>Young</option>
+                  <option value="Adult" ${pet.getBadge() eq 'Adult' ? 'selected' : ''}>Adult</option>
+                  <option value="Senior" ${pet.getBadge() eq 'Senior' ? 'selected' : ''}>Senior</option>
+                </select>
               </div>
             </div>
           </div>

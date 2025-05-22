@@ -208,8 +208,14 @@
         <small class="form-text text-muted">Upload an image of the pet (JPG, PNG, GIF). Max size: 5MB</small>
       </div>
       <div class="form-group">
-        <label for="badge">Badge (e.g., New, Featured)</label>
-        <input type="text" id="badge" name="badge">
+        <label for="badge">Badge</label>
+        <select id="badge" name="badge">
+          <option value="">All Ages</option>
+          <option value="Puppy/Kitten">Puppy/Kitten</option>
+          <option value="Young">Young</option>
+          <option value="Adult">Adult</option>
+          <option value="Senior">Senior</option>
+        </select>
       </div>
     </div>
 

@@ -284,13 +284,17 @@ public class PetRepository {
         // Add age group filter if provided
         if (ageGroup != null && !ageGroup.trim().isEmpty()) {
             if (ageGroup.equals("puppy")) {
-                sqlBuilder.append(" AND age < 1");
+                sqlBuilder.append(" AND badge = ?");
+                params.add("Puppy/Kitten");
             } else if (ageGroup.equals("young")) {
-                sqlBuilder.append(" AND age >= 1 AND age < 3");
+                sqlBuilder.append(" AND badge = ?");
+                params.add("Young");
             } else if (ageGroup.equals("adult")) {
-                sqlBuilder.append(" AND age >= 3 AND age < 8");
+                sqlBuilder.append(" AND badge = ?");
+                params.add("Adult");
             } else if (ageGroup.equals("senior")) {
-                sqlBuilder.append(" AND age >= 8");
+                sqlBuilder.append(" AND badge = ?");
+                params.add("Senior");
             }
         }
 
@@ -468,17 +472,17 @@ public class PetRepository {
         // Add age group filter if provided
         if (ageGroup != null && !ageGroup.trim().isEmpty() && !ageGroup.equals("all")) {
             if (ageGroup.equals("puppy")) {
-                sqlBuilder.append(" AND age LIKE ?");
-                params.add("Puppy%");
+                sqlBuilder.append(" AND badge = ?");
+                params.add("Puppy/Kitten");
             } else if (ageGroup.equals("young")) {
-                sqlBuilder.append(" AND age LIKE ?");
-                params.add("Young%");
+                sqlBuilder.append(" AND badge = ?");
+                params.add("Young");
             } else if (ageGroup.equals("adult")) {
-                sqlBuilder.append(" AND age LIKE ?");
-                params.add("Adult%");
+                sqlBuilder.append(" AND badge = ?");
+                params.add("Adult");
             } else if (ageGroup.equals("senior")) {
-                sqlBuilder.append(" AND age LIKE ?");
-                params.add("Senior%");
+                sqlBuilder.append(" AND badge = ?");
+                params.add("Senior");
             }
         }
 
@@ -545,17 +549,17 @@ public class PetRepository {
         // Add age group filter if provided
         if (ageGroup != null && !ageGroup.trim().isEmpty() && !ageGroup.equals("all")) {
             if (ageGroup.equals("puppy")) {
-                sqlBuilder.append(" AND age LIKE ?");
-                params.add("Puppy%");
+                sqlBuilder.append(" AND badge = ?");
+                params.add("Puppy/Kitten");
             } else if (ageGroup.equals("young")) {
-                sqlBuilder.append(" AND age LIKE ?");
-                params.add("Young%");
+                sqlBuilder.append(" AND badge = ?");
+                params.add("Young");
             } else if (ageGroup.equals("adult")) {
-                sqlBuilder.append(" AND age LIKE ?");
-                params.add("Adult%");
+                sqlBuilder.append(" AND badge = ?");
+                params.add("Adult");
             } else if (ageGroup.equals("senior")) {
-                sqlBuilder.append(" AND age LIKE ?");
-                params.add("Senior%");
+                sqlBuilder.append(" AND badge = ?");
+                params.add("Senior");
             }
         }
 
