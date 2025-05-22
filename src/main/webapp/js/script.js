@@ -2,8 +2,8 @@
 
 // Form validation
 document.addEventListener('DOMContentLoaded', function() {
-    // Password validation has been removed as requested
-
+    console.log("DOM loaded - initializing password toggles");
+    
     // Remove any password strength indicators that might be created
     function removePasswordStrength() {
         const strengthIndicators = document.querySelectorAll('.password-strength');
@@ -16,47 +16,78 @@ document.addEventListener('DOMContentLoaded', function() {
     removePasswordStrength();
 
     // Add password toggle functionality
-    const passwordFields = document.querySelectorAll('input[type="password"]');
-    passwordFields.forEach(field => {
-        // Remove any password strength indicators when typing
-        field.addEventListener('input', removePasswordStrength);
+    function setupPasswordToggles() {
+        console.log("Setting up password toggles");
+        const passwordFields = document.querySelectorAll('input[type="password"]');
+        console.log("Found password fields:", passwordFields.length);
+        
+        passwordFields.forEach(field => {
+            // Remove any password strength indicators when typing
+            field.addEventListener('input', removePasswordStrength);
 
-        // Create wrapper if not already wrapped
-        if (!field.parentElement.classList.contains('password-toggle-wrapper')) {
-            const wrapper = document.createElement('div');
-            wrapper.className = 'password-toggle-wrapper';
-            field.parentNode.insertBefore(wrapper, field);
-            wrapper.appendChild(field);
+            // Check if this field is already set up
+            if (field.dataset.toggleInitialized === 'true') {
+                return;
+            }
+            
+            // Mark as initialized
+            field.dataset.toggleInitialized = 'true';
 
-            // Create toggle button
-            const toggleBtn = document.createElement('button');
-            toggleBtn.type = 'button';
-            toggleBtn.className = 'password-toggle';
-            toggleBtn.innerHTML = '<i class="fas fa-eye"></i>';
-            toggleBtn.title = 'Show password';
-            toggleBtn.setAttribute('aria-label', 'Show password');
-            wrapper.appendChild(toggleBtn);
+            // Create wrapper if not already wrapped
+            let wrapper;
+            if (!field.parentElement.classList.contains('password-toggle-wrapper')) {
+                wrapper = document.createElement('div');
+                wrapper.className = 'password-toggle-wrapper';
+                // Insert wrapper before the field
+                field.parentNode.insertBefore(wrapper, field);
+                // Move field into wrapper
+                wrapper.appendChild(field);
+            } else {
+                wrapper = field.parentElement;
+            }
 
-            // Add toggle functionality
-            toggleBtn.addEventListener('click', function(e) {
-                // Prevent form submission
-                e.preventDefault();
-                e.stopPropagation();
+            // Check if toggle button already exists
+            if (!wrapper.querySelector('.password-toggle')) {
+                // Create toggle button
+                const toggleBtn = document.createElement('button');
+                toggleBtn.type = 'button';
+                toggleBtn.className = 'password-toggle';
+                toggleBtn.innerHTML = '<i class="fas fa-eye"></i>';
+                toggleBtn.title = 'Show password';
+                toggleBtn.setAttribute('aria-label', 'Show password');
+                
+                // Add toggle functionality
+                toggleBtn.addEventListener('click', function(e) {
+                    console.log("Toggle button clicked");
+                    // Prevent form submission
+                    e.preventDefault();
+                    e.stopPropagation();
 
-                if (field.type === 'password') {
-                    field.type = 'text';
-                    this.innerHTML = '<i class="fas fa-eye-slash"></i>';
-                    this.title = 'Hide password';
-                    this.setAttribute('aria-label', 'Hide password');
-                } else {
-                    field.type = 'password';
-                    this.innerHTML = '<i class="fas fa-eye"></i>';
-                    this.title = 'Show password';
-                    this.setAttribute('aria-label', 'Show password');
-                }
-            });
-        }
-    });
+                    // Toggle password visibility
+                    if (field.type === 'password') {
+                        field.type = 'text';
+                        this.innerHTML = '<i class="fas fa-eye-slash"></i>';
+                        this.title = 'Hide password';
+                        this.setAttribute('aria-label', 'Hide password');
+                    } else {
+                        field.type = 'password';
+                        this.innerHTML = '<i class="fas fa-eye"></i>';
+                        this.title = 'Show password';
+                        this.setAttribute('aria-label', 'Show password');
+                    }
+                });
+                
+                // Append button to wrapper
+                wrapper.appendChild(toggleBtn);
+            }
+        });
+    }
+    
+    // Set up toggles initially
+    setupPasswordToggles();
+    
+    // Also set up toggles after a short delay (helps with dynamic content)
+    setTimeout(setupPasswordToggles, 500);
 
     // Form submission validation
     const forms = document.querySelectorAll('form');

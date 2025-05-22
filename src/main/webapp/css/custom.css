@@ -115,6 +115,7 @@ footer {
 .password-toggle-wrapper {
   position: relative;
   width: 100%;
+  display: flex;
 }
 
 .password-toggle {
@@ -127,8 +128,22 @@ footer {
   z-index: 2;
   background: none;
   border: none;
-  padding: 0;
+  padding: 6px;
   font-size: 1.1rem;
+  transition: color 0.2s;
+}
+
+.password-toggle:hover {
+  color: var(--secondary-color);
+}
+
+.password-toggle:focus {
+  outline: none;
+  color: var(--secondary-color);
+}
+
+.password-toggle:active {
+  transform: translateY(-50%) scale(0.95);
 }
 
 .terms {

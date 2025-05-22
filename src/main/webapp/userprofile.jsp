@@ -12,8 +12,10 @@
   <jsp:param name="extraHead" value="/WEB-INF/includes/profile-styles.jsp" />
 </jsp:include>
 
-
 <%
+  // Get the context path for use in JavaScript
+  String contextPath = request.getContextPath();
+
   // Check if user is logged in
   Object userIdObj = session.getAttribute("userId");
   Object userRoleObj = session.getAttribute("userRole");
@@ -407,7 +409,7 @@
 
         // Send AJAX request
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'update-profile');
+        xhr.open('POST', '<%= contextPath %>/UpdateProfileServlet');
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.onload = function() {
           if (xhr.status === 200) {
@@ -468,7 +470,7 @@
 
         // Send AJAX request
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'update-profile');
+        xhr.open('POST', '<%= contextPath %>/ChangePasswordServlet');
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.onload = function() {
           if (xhr.status === 200) {
@@ -506,7 +508,7 @@
           // Submit form to delete account
           const form = document.createElement('form');
           form.method = 'POST';
-          form.action = 'DeleteAccountServlet';
+          form.action = '<%= contextPath %>/DeleteAccountServlet';
           document.body.appendChild(form);
           form.submit();
         }
@@ -544,7 +546,7 @@
         // Submit form to mark all notifications as read
         const form = document.createElement('form');
         form.method = 'POST';
-        form.action = 'MarkNotificationsReadServlet';
+        form.action = '<%= contextPath %>/MarkNotificationsReadServlet';
         document.body.appendChild(form);
         form.submit();
       });
@@ -588,7 +590,7 @@
 
         // Send request to mark notification as read
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'DismissNotificationServlet');
+        xhr.open('POST', '<%= contextPath %>/DismissNotificationServlet');
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.send('notificationId=' + notificationId);
       });

@@ -49,12 +49,22 @@
 
       <div class="input-group">
         <i class="fas fa-lock"></i>
-        <input type="password" id="password" name="password" placeholder="Password" required>
+        <div class="password-toggle-wrapper">
+          <input type="password" id="password" name="password" placeholder="Password" required>
+          <button type="button" class="password-toggle" title="Show password" aria-label="Show password">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
       </div>
 
       <div class="input-group">
         <i class="fas fa-lock"></i>
-        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required>
+        <div class="password-toggle-wrapper">
+          <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required>
+          <button type="button" class="password-toggle" title="Show password" aria-label="Show password">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
       </div>
 
       <div class="input-group">
@@ -100,6 +110,33 @@
     const passwordFields = document.querySelectorAll('input[type="password"]');
     passwordFields.forEach(field => {
       field.addEventListener('input', removePasswordStrength);
+    });
+    
+    // Add password toggle functionality
+    const toggleBtns = document.querySelectorAll('.password-toggle');
+    
+    toggleBtns.forEach(toggleBtn => {
+      const passwordField = toggleBtn.previousElementSibling;
+      
+      if (passwordField && passwordField.type === 'password') {
+        toggleBtn.addEventListener('click', function(e) {
+          // Prevent form submission
+          e.preventDefault();
+          e.stopPropagation();
+
+          if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            this.innerHTML = '<i class="fas fa-eye-slash"></i>';
+            this.title = 'Hide password';
+            this.setAttribute('aria-label', 'Hide password');
+          } else {
+            passwordField.type = 'password';
+            this.innerHTML = '<i class="fas fa-eye"></i>';
+            this.title = 'Show password';
+            this.setAttribute('aria-label', 'Show password');
+          }
+        });
+      }
     });
   });
 </script>
