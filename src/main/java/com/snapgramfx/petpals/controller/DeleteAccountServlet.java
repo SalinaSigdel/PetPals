@@ -12,7 +12,7 @@ import java.io.IOException;
 /**
  * Servlet for handling user account deletion
  */
-@WebServlet(name = "deleteAccountServlet", urlPatterns = {"/DeleteAccountServlet"})
+@WebServlet(name = "deleteAccountServlet", urlPatterns = {"/DeleteAccountServlet", "/delete-account", "/deleteAccount"})
 public class DeleteAccountServlet extends HttpServlet {
     
     private final UserService userService;

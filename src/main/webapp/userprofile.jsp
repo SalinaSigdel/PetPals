@@ -23,6 +23,9 @@
   boolean isLoggedIn = (userIdObj != null);
   boolean isAdmin = (userIdObj != null && "admin".equals(userRole));
 
+  // Get error message from URL parameter
+  String errorMessage = request.getParameter("error");
+
   // Redirect if not logged in
   if (!isLoggedIn) {
     response.sendRedirect("login");
@@ -110,6 +113,12 @@
   %>
   <div class="alert alert-success">
     <i class="fas fa-check-circle"></i> <%= successMessage %>
+  </div>
+  <% } %>
+
+  <% if (errorMessage != null && !errorMessage.isEmpty()) { %>
+  <div class="alert alert-danger">
+    <i class="fas fa-exclamation-circle"></i> <%= errorMessage %>
   </div>
   <% } %>
 
@@ -218,6 +227,9 @@
         <h2 class="danger-zone"><i class="fas fa-exclamation-triangle"></i> Danger Zone</h2>
       </div>
       <p class="danger-description">Once you delete your account, there is no going back. Please be certain.</p>
+      <form id="delete-account-form" method="POST" action="delete-account.jsp" style="display: inline;">
+        <!-- No form fields needed -->
+      </form>
       <button class="btn btn-danger" id="deleteAccountBtn"><i class="fas fa-trash-alt"></i> Delete My Account</button>
     </div>
   </div>
@@ -505,12 +517,8 @@
     if (deleteAccountBtn) {
       deleteAccountBtn.addEventListener('click', function() {
         if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
-          // Submit form to delete account
-          const form = document.createElement('form');
-          form.method = 'POST';
-          form.action = '<%= contextPath %>/DeleteAccountServlet';
-          document.body.appendChild(form);
-          form.submit();
+          // Submit the existing form instead of creating a new one
+          document.getElementById('delete-account-form').submit();
         }
       });
     }

@@ -5,6 +5,7 @@
 <%
   // Get redirect URL if any
   String redirectUrl = request.getParameter("redirect");
+  String successMessage = request.getParameter("success");
 
 // Redirect if already logged in
   Object userIdObj = session.getAttribute("userId");
@@ -57,8 +58,7 @@
         session.removeAttribute("loginError");
       }
 
-      // Display success message if registration was successful
-      String successMessage = (String) request.getAttribute("successMessage");
+      // Display success message if any
       if (successMessage != null) {
     %>
     <div class="success-message">
